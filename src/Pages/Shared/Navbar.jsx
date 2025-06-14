@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { MdLogin } from "react-icons/md";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router";  
+import { RiArrowDropDownLine } from "react-icons/ri";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // dropdown toggle state
+
   const links = (
     <>
       <li>
@@ -12,19 +17,29 @@ const Navbar = () => {
         <NavLink to="/allPackages">All Packages</NavLink>
       </li>
       <li>
-        <NavLink to="/aboutUs">About Us </NavLink>
+        <NavLink to="/aboutUs">About Us</NavLink>
       </li>
-
-      {/* {user && (
-            <li>
-              <NavLink to="/myApplications">My Applications</NavLink>
-            </li>
-          )} */}
+      {user && (
+        <li>
+          <NavLink to="/myBookings">My Bookings</NavLink>
+        </li>
+      )}
     </>
   );
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        console.log("User Signed Out");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div>
-      <div className="navbar bg-base-100 shadow-sm">
+      <div className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -35,13 +50,12 @@ const Navbar = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {" "}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M4 6h16M4 12h8m-8 6h16"
-                />{" "}
+                />
               </svg>
             </div>
             <ul
@@ -51,25 +65,105 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          {/* <Link to="/" className="text-xl font-bold ml-2">
-            GoJoy
-          </Link> */}
-          <Link to="/">
-            <img
-              className="w-18 ml-2"
-              src="https://i.ibb.co/8D4d4yK6/gojoy-logo-transparent.png"
-              alt="GoJoy Logo"
-            />
-          </Link>
+          <div className="flex items-center">
+            <div>
+              <Link to="/">
+                <img
+                  className="w-18 ml-2"
+                  src="https://i.ibb.co/8D4d4yK6/gojoy-logo-transparent.png"
+                  alt="GoJoy Logo"
+                />
+              </Link>
+            </div>
+            <div>
+              <h1 className="font-bold text-xl ">
+                Go<span className="text-orange-500 text-2xl">Joy</span>
+              </h1>
+            </div>
+          </div>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
+
         <div className="navbar-end">
-          <Link to={"/auth/logIn"} className="btn btn-primary">
-            <MdLogin size={25} />
-            LogIn
-          </Link>
+          {user ? (
+            <div className="relative">
+              <div
+                className="flex items-center btn cursor-pointer rounded-full  w-20"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <div className="avatar avatar-online avatar-placeholder">
+                  <div className="w-10 rounded-full ">
+                    <img
+                      src={
+                        user.photoURL ||
+                        "https://i.ibb.co/YTjW3vF/default-profile.jpg"
+                      }
+                      alt="User Photo"
+                    />
+                  </div>
+                </div>
+                {/*Dropdown rotation */}
+                <div
+                  className={`transform transition-transform duration-300 ${
+                    dropdownOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  <RiArrowDropDownLine size={35} />
+                </div>
+              </div>
+
+              {/* Dropdown Menu */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 p-5 w-60 lg:w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                  <div className="py-1 text-center">
+                    <img
+                      src={
+                        user.photoURL ||
+                        "https://i.ibb.co/YTjW3vF/default-profile.jpg"
+                      }
+                      alt="Profile"
+                      className="w-16 h-16 rounded-full mx-auto"
+                    />
+                    <p className="font-semibold my-2">{user.email}</p>
+                    <hr className="my-2" />
+
+                    <ul className="space-y-2 text-left">
+                      <li>
+                        <NavLink
+                          to="/addPackage"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                        >
+                          Add Package
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/manageMyPackages"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                        >
+                          Manage My Packages
+                        </NavLink>
+                      </li>
+                      <li>
+                        <button
+                          onClick={handleSignOut}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                        >
+                          LogOut
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to={"/auth/logIn"} className="btn btn-primary">
+              <MdLogin size={25} /> LogIn
+            </Link>
+          )}
         </div>
       </div>
     </div>

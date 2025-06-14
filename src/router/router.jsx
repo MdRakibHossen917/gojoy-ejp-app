@@ -1,5 +1,5 @@
 import React from "react";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router"; // react-router-dom ইউজ করো
 import RootLayouts from "../layouts/RootLayouts";
 import Home from "../Pages/Home/Home";
 import AllPackages from "../Pages/AllPackages/AllPackages";
@@ -13,43 +13,94 @@ import ContactUs from "../Pages/FooterLinks/ContactUs";
 import AboutUs from "../Pages/AboutUs/AboutUs";
 import AboutFooterUs from "../Pages/FooterLinks/AboutFooterUs";
 import ErrorPage from "../Pages/errorPage/ErrorPage";
+import PackageDetails from "../Pages/PackageDetails/PackageDetails";
+import AddPackage from "../Pages/AddPackage/AddPackage";
+import MyBookings from "../Pages/MyBookings/MyBookings";
+import ManageMyPackages from "../Pages/ManageMyPackages/ManageMyPackages";
+import PrivateRoute from "../routes/PrivateRoutes";
+import BookingPageApply from "../Pages/BookingPageApply/BookingPageApply";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: RootLayouts,
-    errorElement:<ErrorPage/>,
+    element: <RootLayouts />,
     children: [
       {
         index: true,
-        Component: Home,
+        element: <Home />,
       },
       {
-        path: "/allPackages",
-        Component: AllPackages,
+        path: "allPackages",
+        element: <AllPackages />,
       },
       {
-        path: "/aboutUs",
-        Component: AboutUs,
+        path: "aboutUs",
+        element: <AboutUs />,
+      },
+      {
+        path: "packages/:id",
+        element: (
+          <PrivateRoute>
+            <PackageDetails />
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/packages/${params.id}`),
+      },
+      {
+        path: "bookingPageApply/:id",
+        element: (
+          <PrivateRoute>
+            <BookingPageApply />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "myBookings",
+        element: (
+          <PrivateRoute>
+            <MyBookings />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "addPackage",
+        element: (
+          <PrivateRoute>
+            <AddPackage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manageMyPackages",
+        element: (
+          <PrivateRoute>
+            <ManageMyPackages />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "*",
+        element: <ErrorPage />,
       },
     ],
   },
   {
-    path: "/auth",
+    path: "auth",
     element: <AuthLayout />,
     children: [
-      { path: "/auth/logIn", element: <LogIn /> },
-      { path: "/auth/register", element: <Register /> },
+      { path: "logIn", element: <LogIn /> },
+      { path: "register", element: <Register /> },
     ],
   },
   {
-    path: "/FooterLayout",
+    path: "FooterLayout",
     element: <FooterLayout />,
     children: [
-      { path: "/FooterLayout/termsConditions", element: <TermsConditions /> },
-      { path: "/FooterLayout/privacyPolicy", element: <PrivacyPolicy /> },
-      { path: "/FooterLayout/contactUs", element: <ContactUs /> },
-      { path: "/FooterLayout/aboutFooterUs", element: <AboutFooterUs /> },
+      { path: "termsConditions", element: <TermsConditions /> },
+      { path: "privacyPolicy", element: <PrivacyPolicy /> },
+      { path: "contactUs", element: <ContactUs /> },
+      { path: "aboutFooterUs", element: <AboutFooterUs /> },
     ],
   },
 ]);

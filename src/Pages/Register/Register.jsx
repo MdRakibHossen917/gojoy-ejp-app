@@ -1,7 +1,17 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router";
+import { updateProfile } from "firebase/auth";
+
+import Swal from "sweetalert2";
+import regLottie from "../../assets/registerLottie.json";
+import Lottie from "lottie-react";
+import { AuthContext } from "../../contexts/AuthContext";
+ 
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { createUser } = useContext(AuthContext);
+
   const handlerRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -10,7 +20,9 @@ const Register = () => {
     const photoURL = form.photoURL.value;
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
+
     console.log(name, email, photoURL, password, confirmPassword);
+
     // Validation
     if (!name || !email || !password) {
       alert("Please fill in all required fields.");
@@ -41,10 +53,45 @@ const Register = () => {
       alert("Password must contain at least one special character.");
       return;
     }
+
+    // Firebase signup via context
+    createUser(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        updateProfile(user, {
+          displayName: name,
+          photoURL: photoURL,
+        })
+          .then(() => {
+            // alert("User registered successfully!");
+            // Swal.fire("register Or success");
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "User registered successfully!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            // navigate("/auth/login");
+            navigate("/");
+          })
+          .catch((error) => {
+            console.log("Profile update error:", error.message);
+          });
+      })
+      .catch((error) => {
+        console.log("Signup error:", error.message);
+        alert(error.message);
+      });
   };
+
   return (
     <div className="bg-base-100 min-h-screen">
-      <div className="w-full max-w-md p-10 mx-auto flex items-center justify-center">
+      <div className="w-full max-w-md p-10 mt-20 mx-auto flex items-center justify-center">
+        {/* Lottie Animation - Only visible on large screens and up */}
+        <div className="hidden lg:block text-center lg:text-left">
+          <Lottie animationData={regLottie} loop style={{ width: "400px" }} />
+        </div>
         <div className="card w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body bg-base-100">
             <div className="text-center">
@@ -59,6 +106,7 @@ const Register = () => {
                 >
                   Log In
                 </Link>{" "}
+                here
               </p>
             </div>
 
