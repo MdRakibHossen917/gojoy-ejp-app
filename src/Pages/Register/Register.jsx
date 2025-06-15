@@ -44,6 +44,12 @@ const Register = () => {
       return;
     }
 
+    if (!/[a-z]/.test(password)) {
+      // lowercase check
+      alert("Password must contain at least one lowercase letter.");
+      return;
+    }
+
     if (!/[0-9]/.test(password)) {
       alert("Password must contain at least one number.");
       return;
@@ -53,6 +59,7 @@ const Register = () => {
       alert("Password must contain at least one special character.");
       return;
     }
+    
 
     // Firebase signup via context
     createUser(email, password)

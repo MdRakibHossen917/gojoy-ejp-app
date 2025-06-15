@@ -1,12 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { MdLogin } from "react-icons/md";
-import { Link, NavLink } from "react-router";  
+import { Link, NavLink } from "react-router";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
-  const [dropdownOpen, setDropdownOpen] = useState(false); // dropdown toggle state
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // Dropdown wrapper ref
+  const dropdownRef = useRef();
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    window.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const links = (
     <>
@@ -21,7 +39,7 @@ const Navbar = () => {
       </li>
       {user && (
         <li>
-          <NavLink to="/myBookings">My Bookings</NavLink>
+          <NavLink to="myBookings">My Bookings</NavLink>
         </li>
       )}
     </>
@@ -88,13 +106,13 @@ const Navbar = () => {
 
         <div className="navbar-end">
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <div
                 className="flex items-center btn cursor-pointer rounded-full  w-20"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 <div className="avatar avatar-online avatar-placeholder">
-                  <div className="w-10 rounded-full ">
+                  <div className="w-10 rounded-full">
                     <img
                       src={
                         user.photoURL ||
@@ -104,7 +122,6 @@ const Navbar = () => {
                     />
                   </div>
                 </div>
-                {/*Dropdown rotation */}
                 <div
                   className={`transform transition-transform duration-300 ${
                     dropdownOpen ? "rotate-180" : ""
@@ -114,7 +131,6 @@ const Navbar = () => {
                 </div>
               </div>
 
-              {/* Dropdown Menu */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 p-5 w-60 lg:w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
                   <div className="py-1 text-center">
@@ -140,7 +156,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavLink
-                          to="/manageMyPackages"
+                          to="/manage-my-packages"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
                         >
                           Manage My Packages

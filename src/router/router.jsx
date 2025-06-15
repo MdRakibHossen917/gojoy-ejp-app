@@ -1,5 +1,5 @@
 import React from "react";
-import { createBrowserRouter } from "react-router"; // react-router-dom ইউজ করো
+import { createBrowserRouter } from "react-router"; 
 import RootLayouts from "../layouts/RootLayouts";
 import Home from "../Pages/Home/Home";
 import AllPackages from "../Pages/AllPackages/AllPackages";
@@ -19,24 +19,17 @@ import MyBookings from "../Pages/MyBookings/MyBookings";
 import ManageMyPackages from "../Pages/ManageMyPackages/ManageMyPackages";
 import PrivateRoute from "../routes/PrivateRoutes";
 import BookingPageApply from "../Pages/BookingPageApply/BookingPageApply";
+import UpdatePackage from "../Pages/ManageMyPackages/UpdatePackage";
+import axios from "axios";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayouts />,
     children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "allPackages",
-        element: <AllPackages />,
-      },
-      {
-        path: "aboutUs",
-        element: <AboutUs />,
-      },
+      { index: true, element: <Home /> },
+      { path: "allPackages", element: <AllPackages /> },
+      { path: "aboutUs", element: <AboutUs /> },
       {
         path: "packages/:id",
         element: (
@@ -44,8 +37,12 @@ const router = createBrowserRouter([
             <PackageDetails />
           </PrivateRoute>
         ),
-        loader: ({ params }) =>
-          fetch(`http://localhost:5000/packages/${params.id}`),
+        loader: async ({ params }) => {
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/packages/${params.id}`
+          );
+          return res.data;
+        },
       },
       {
         path: "bookingPageApply/:id",
@@ -72,7 +69,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "manageMyPackages",
+        path: "manage-my-packages",
         element: (
           <PrivateRoute>
             <ManageMyPackages />
@@ -80,9 +77,14 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "*",
-        element: <ErrorPage />,
+        path: "manage-my-packages-update/:id",
+        element: (
+          <PrivateRoute>
+            <UpdatePackage />
+          </PrivateRoute>
+        ),
       },
+      { path: "*", element: <ErrorPage /> },
     ],
   },
   {

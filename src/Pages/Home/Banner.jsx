@@ -9,29 +9,30 @@ const Banner = () => {
   };
 
   return (
-    <div className="hero min-h-[100vh] bg-gradient-to-r from-[#e0f7fa] to-[#fffde7]">
+    <div className="hero bg-gradient-to-r from-[#e0f7fa] to-[#fffde7]  ">
       <div className="hero-content flex flex-col md:flex-row items-center justify-between w-full px-6 md:px-12">
         {/* Left Side Image */}
-        <div className="w-full md:w-1/2   ">
+        <div className="w-full md:w-1/2 flex justify-center">
           <img
-            className="rounded-tl-full   object-cover"
-            src="https://i.ibb.co/wZnvV0FS/pexels-arina-krasnikova-7350882.jpg"
+            className="rounded-full w-80 h-80 object-cover   transition duration-500 hover:scale-105"
+            src="https://i.ibb.co/Hfm6rtp9/travel-concept-with-baggage.jpg"
             alt="Travel"
           />
         </div>
 
         {/* Right Side Text Content */}
-        <div className="w-full md:w-1/2 text-center md:text-left mt-6 md:mt-0">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Discover Unforgettable Journeys
+        <div className="w-full md:w-1/2 text-center md:text-left mt-8 md:mt-0">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">
+            Embark on <span className="text-primary">Life-Changing</span>{" "}
+            Adventures
           </h1>
-          <p className="text-gray-600 max-w-xl mb-6 mx-auto md:mx-0">
-            GoJoy brings you curated travel experiences from around the world.
-            Find your perfect adventure with just one click.
+          <p className="text-gray-600 max-w-xl mb-8 mx-auto md:mx-0 text-lg">
+            Explore the world’s most breathtaking destinations with GoJoy — your
+            gateway to unforgettable memories.
           </p>
           <button
             onClick={handleExploreClick}
-            className="btn btn-primary text-white px-6 py-3 rounded-lg"
+            className="btn btn-primary text-white px-8 py-3 rounded-lg text-lg shadow-md hover:scale-105 transition"
           >
             Explore All Packages
           </button>

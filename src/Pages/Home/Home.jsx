@@ -1,23 +1,93 @@
-import React, { Suspense } from 'react';
-import FeaturedPackage from './FeaturedPackage';
-import Banner from './Banner';
- 
+import React, { Suspense, useState } from "react";
+import { useNavigate } from "react-router";
+import { FiPhoneCall } from "react-icons/fi"; 
+import FeaturedPackage from "./FeaturedPackage";
+import Banner from "./Banner";
 
 const Home = () => {
-  const featuredPackagePromise = fetch("http://localhost:5000/packages").then(res=>res.json())
-   
-    return (
-      <div>
-        <Banner></Banner>
-        <Suspense
-          fallback={<span className="loading loading-dots loading-xl"></span>}
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const featuredPackagePromise = fetch("http://localhost:5000/packages").then(
+    (res) => res.json()
+  );
+
+  return (
+    <div>
+      <Banner />
+
+      <Suspense
+        fallback={<span className="loading loading-dots loading-xl"></span>}
+      >
+        <FeaturedPackage featuredPackagePromise={featuredPackagePromise} />
+      </Suspense>
+
+      <div className="text-center mt-8">
+        <button
+          onClick={() => navigate("/allPackages")}
+          className="btn btn-primary px-8"
         >
-          <FeaturedPackage
-            featuredPackagePromise={featuredPackagePromise}
-          ></FeaturedPackage>
-        </Suspense>
+          Show All
+        </button>
       </div>
-    );
+
+      {/* Section 1 */}
+      <section className="my-16 px-6 max-w-6xl mx-auto text-center">
+        <h2 className="text-3xl font-bold mb-6 text-indigo-600">
+          Explore More Destinations
+        </h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          Discover hidden gems and popular tourist spots with our exclusive
+          packages tailored just for you. Adventure, relaxation, and culture all
+          in one place.
+        </p>
+      </section>
+
+      {/* Section 2: Customer Support */}
+      <section className="my-16 px-6 max-w-6xl mx-auto bg-indigo-50 rounded-lg p-10 text-center">
+        <h2 className="text-3xl font-bold mb-6 text-indigo-700">
+          Customer Support
+        </h2>
+        <p className="text-gray-700 max-w-3xl mx-auto mb-4">
+          Our dedicated support team is available 24/7 to help you with your
+          bookings, answer questions, and provide travel assistance.
+        </p>
+        <button
+          className="btn btn-outline btn-indigo"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Contact Us
+        </button>
+      </section>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 flex justify-center items-center z-50"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-lg p-6 flex items-center gap-4 shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FiPhoneCall className="text-3xl text-green-600" />
+            <a
+              href="tel:0123455667"
+              className="text-xl font-semibold text-green-700 hover:underline"
+            >
+              0123455667
+            </a>
+            <button
+              className="ml-6 text-gray-500 hover:text-gray-800 text-xl font-bold"
+              onClick={() => setIsModalOpen(false)}
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Home;

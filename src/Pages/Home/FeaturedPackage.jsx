@@ -14,7 +14,7 @@ const FeaturedPackage = ({ featuredPackagePromise }) => {
   return (
     <div>
       <h2 className="text-4xl text-center my-2 font-bold">
-        Feature Package of the Month
+        Feature of the Package  
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
         {features.map((feature) => (
