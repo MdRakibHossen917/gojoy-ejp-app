@@ -36,38 +36,34 @@ const PackageDetails = () => {
       Swal.fire("Error", "You must be logged in to like/unlike", "error");
       return;
     }
+
+    // Prevent guide from liking own package
+    if (user.email === packageData.guideEmail) {
+      Swal.fire("Warning", "You cannot like your own package.", "warning");
+      return;
+    }
+
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/packages/${id}/toggle-like`,
-        {
-          userEmail: user.email,
-        }
+        { userEmail: user.email }
       );
 
-      // Update local like state and likedBy array based on backend response
       setLiked(res.data.currentLiked);
 
       setPackageData((prev) => {
-        if (res.data.currentLiked) {
-          // Add user email if not already there
-          if (!prev.likedBy.includes(user.email)) {
-            return { ...prev, likedBy: [...(prev.likedBy || []), user.email] };
-          }
-          return prev;
-        } else {
-          // Remove user email
-          return {
-            ...prev,
-            likedBy: prev.likedBy.filter((email) => email !== user.email),
-          };
-        }
+        const updatedLikedBy = res.data.currentLiked
+          ? [...(prev.likedBy || []), user.email]
+          : (prev.likedBy || []).filter((email) => email !== user.email);
+
+        return { ...prev, likedBy: updatedLikedBy };
       });
 
       Swal.fire(
-        "Success",
+        res.data.currentLiked ? "Liked!" : "Unliked!",
         res.data.currentLiked
-          ? "You liked this package!"
-          : "You unliked this package!",
+          ? "Thanks for showing interest."
+          : "You've removed your interest.",
         "success"
       );
     } catch (err) {
@@ -75,6 +71,7 @@ const PackageDetails = () => {
       Swal.fire("Error", "Failed to toggle like", "error");
     }
   };
+  
 
   // Booking submit handler (unchanged)
   const handleBookingSubmit = async (e) => {
@@ -121,7 +118,7 @@ const PackageDetails = () => {
         className="w-full rounded"
       />
       <div className="max-w-4xl mx-auto p-5 my-10 bg-white rounded-lg shadow-md">
-        <h1 className="text-4xl font-bold mb-6">{packageData.tourName}</h1>
+        <h1 className="text-4xl font-bold mb-6">{packageData.tour_name}</h1>
 
         {/* Package Details */}
         <div className="space-y-2 text-gray-800">
@@ -132,11 +129,15 @@ const PackageDetails = () => {
             <strong>Price:</strong> {packageData.price} BDT
           </p>
           <p>
-            <strong>Departure:</strong> {packageData.departureLocation} on{" "}
-            {new Date(packageData.departureDate).toLocaleDateString()}
+            <strong>Departure:</strong>{" "}
+            {new Date(packageData.departure_date).toLocaleDateString()}
           </p>
+
           <p>
             <strong>Destination:</strong> {packageData.destination}
+          </p>
+          <p>
+            <strong>Available Seat:</strong> {packageData.total_set}
           </p>
           <p className="  text-gray-700">
             <strong>Description:</strong> {packageData.packageDetails}
@@ -160,7 +161,7 @@ const PackageDetails = () => {
               </p>
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Contact:</span>{" "}
-                {packageData.contactNo}
+                {packageData.contact_no}
               </p>
             </div>
           </div>
@@ -267,13 +268,13 @@ const PackageDetails = () => {
                   />
                 </div>
 
-                {/* Buyer Name */}
+                {/* Guide Name */}
                 <div>
                   <label
                     htmlFor="buyerName"
                     className="block text-sm font-semibold text-gray-700 mb-2"
                   >
-                    Buyer Name
+                    Guide Name
                   </label>
                   <input
                     id="buyerName"
@@ -284,13 +285,13 @@ const PackageDetails = () => {
                   />
                 </div>
 
-                {/* Buyer Email */}
+                {/* Guide Email */}
                 <div>
                   <label
                     htmlFor="buyerEmail"
                     className="block text-sm font-semibold text-gray-700 mb-2"
                   >
-                    Buyer Email
+                    Guide Email
                   </label>
                   <input
                     id="buyerEmail"

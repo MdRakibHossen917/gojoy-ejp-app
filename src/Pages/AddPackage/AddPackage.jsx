@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 const AddPackage = () => {
   const { user } = useAuth();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const handleAddPackage = (e) => {
     e.preventDefault();
@@ -14,16 +14,27 @@ const AddPackage = () => {
     const formData = new FormData(form);
     const newAddPackage = Object.fromEntries(formData.entries());
 
-    newAddPackage.guideName = user?.displayName;
-    newAddPackage.guidePhoto = user?.photoURL;
-    newAddPackage.guideEmail = user?.email;
-    newAddPackage.likedBy = [];
+    // mapping fields as per backend requirement
+    const packageData = {
+      tour_name: newAddPackage.tourName,
+      image: newAddPackage.image,
+      duration: newAddPackage.duration,
+      departure_location: newAddPackage.departureLocation,
+      destination: newAddPackage.destination,
+      price: parseFloat(newAddPackage.price),
+      departure_date: newAddPackage.departureDate,
+      contact_no: newAddPackage.contactNo,
+      package_details: newAddPackage.packageDetails,
+      total_set: parseInt(newAddPackage.totalSet),
+      guideName: user?.displayName,
+      guidePhoto: user?.photoURL,
+      guideEmail: user?.email,
+      likedBy: [],
+    };
 
-    //axios
     axios
-      .post(`${import.meta.env.VITE_API_URL}/add-tour-packages`, newAddPackage)
+      .post(`${import.meta.env.VITE_API_URL}/add-tour-packages`, packageData)
       .then((data) => {
-        console.log(data);
         Swal.fire({
           position: "center",
           icon: "success",
@@ -31,12 +42,15 @@ const AddPackage = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        navigate('/')
-      }).catch(err=>{
-        console.log(err);
+        navigate("/");
       })
-
-    console.log(newAddPackage);
+      .catch((err) => {
+        console.error(
+          "Error adding package:",
+          err.response?.data || err.message
+        );
+        Swal.fire("Error", "Failed to add package", "error");
+      });
   };
 
   return (
@@ -130,6 +144,17 @@ const AddPackage = () => {
             type="text"
             name="contactNo"
             placeholder="Contact Number"
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="label font-semibold">Total Set</label>
+          <input
+            type="number"
+            name="totalSet"
+            placeholder="Total Set"
             className="input input-bordered w-full"
             required
           />

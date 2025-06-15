@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";  
+import { Link } from "react-router";
 
 const FeaturedPackageCard = ({ feature }) => {
   const {
@@ -7,13 +7,14 @@ const FeaturedPackageCard = ({ feature }) => {
     tourName,
     image,
     duration,
-    departureLocation,
+    departure_location,
     destination,
     price,
-    departureDate,
+    departure_date,
     packageDetails,
     guideName,
     guidePhoto,
+    total_set,
   } = feature;
   console.log(feature);
 
@@ -37,14 +38,23 @@ const FeaturedPackageCard = ({ feature }) => {
 
         {/* Departure & Destination */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <span className="font-semibold text-gray-700">From:</span>
-          <span className="badge badge-outline">{departureLocation}</span>
+          <span className="font-semibold text-gray-700">
+            From:{departure_location}
+          </span>
+          <span className="badge badge-outline">{departure_location}</span>
           <span className="font-semibold text-gray-700">To:</span>
           <span className="badge badge-outline">{destination}</span>
         </div>
 
+        {/* total set */}
+        <p className="text-sm text-gray-700 mb-1">
+          Available Seat: {total_set}
+        </p>
+
         {/* Departure Date */}
-        <p className="text-sm text-gray-700 mb-1">Departure: {departureDate}</p>
+        <p className="text-sm text-gray-700 mb-1">
+          Departure: {departure_date}
+        </p>
 
         {/* Price */}
         <p className="text-lg font-semibold text-primary mb-3">

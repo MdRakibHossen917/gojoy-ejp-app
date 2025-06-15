@@ -34,14 +34,15 @@ const Navbar = () => {
       <li>
         <NavLink to="/allPackages">All Packages</NavLink>
       </li>
-      <li>
-        <NavLink to="/aboutUs">About Us</NavLink>
-      </li>
+
       {user && (
         <li>
           <NavLink to="myBookings">My Bookings</NavLink>
         </li>
       )}
+      <li>
+        <NavLink to="/aboutUs">About Us</NavLink>
+      </li>
     </>
   );
 
