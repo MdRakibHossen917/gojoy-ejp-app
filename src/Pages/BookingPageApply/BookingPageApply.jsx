@@ -2,12 +2,11 @@ import React from "react";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Link } from "react-router"; // <-- fixed
 
 const BookingPageApply = () => {
   const { user } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
@@ -28,28 +27,37 @@ const BookingPageApply = () => {
       created_at: new Date(),
     };
 
-    console.log("Submitting Package:", tourPackage);
+    try {
+      
+      const token = await user.getIdToken();
 
-    axios
-      .post("http://localhost:5000/packages", tourPackage)
-      .then((res) => {
-        if (res.data.insertedId) {
-          Swal.fire({
-            icon: "success",
-            title: "Package Added Successfully!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          form.reset();
+        
+      const res = await axios.post(
+        "http://localhost:5000/add-tour-packages",
+        tourPackage,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
-      .catch((err) => {
-        console.error("Error adding package:", err);
+      );
+
+      if (res.data.insertedId) {
         Swal.fire({
-          icon: "error",
-          title: "Something went wrong!",
+          icon: "success",
+          title: "Package Added Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
         });
+        form.reset();
+      }
+    } catch (err) {
+      console.error("Error adding package:", err);
+      Swal.fire({
+        icon: "error",
+        title: err.response?.data?.error || "Something went wrong!",
       });
+    }
   };
 
   return (

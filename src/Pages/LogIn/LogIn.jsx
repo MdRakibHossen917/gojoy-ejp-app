@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router";  
+import { Link, useLocation, useNavigate } from "react-router";
 import Lottie from "lottie-react";
 import logInLottie from "../../assets/LoginLottie.json";
 import SocialLogIn from "../Shared/SocialLogIn";
 import { AuthContext } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const LogIn = () => {
   const { signInUser } = useContext(AuthContext);
   const location = useLocation();
-  console.log('location in signIn page',location);
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || "/"; //optional chaining safe
+  const from = location.state?.from?.pathname || "/";
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -18,16 +18,13 @@ const LogIn = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log(email, password);
-
-    // SignIn user
     signInUser(email, password)
       .then((result) => {
-        console.log(result.user);
-        navigate(from); // Correct way to navigate after login
+        toast.success("Logged in successfully!");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
-        console.log(error.message);
+        toast.error(`Login Failed: ${error.message}`);
       });
   };
 
@@ -43,7 +40,6 @@ const LogIn = () => {
 
             <form onSubmit={handleSignIn}>
               <SocialLogIn from={from}></SocialLogIn>
-
               <div className="divider">OR</div>
 
               <label htmlFor="email" className="label">

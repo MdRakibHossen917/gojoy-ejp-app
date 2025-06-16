@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const FeaturedPackageCard = ({ feature }) => {
   const {
     _id,
-    tourName,
+    tour_name,
     image,
     duration,
     departure_location,
@@ -25,7 +25,7 @@ const FeaturedPackageCard = ({ feature }) => {
         <img
           className="w-full p-4 rounded-4xl h-64 object-cover   transition duration-500 hover:scale-105"
           src={image}
-          alt={tourName}
+          alt={tour_name}
         />
         <div className="absolute top-4 left-4 bg-secondary text-white py-1 px-3 rounded-full text-sm">
           {duration}
@@ -34,13 +34,11 @@ const FeaturedPackageCard = ({ feature }) => {
 
       <div className="card-body p-4">
         {/* Tour Name */}
-        <h2 className="text-xl font-bold mb-3">{tourName}</h2>
+        <h2 className="text-xl font-bold mb-3">{tour_name}</h2>
 
         {/* Departure & Destination */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <span className="font-semibold text-gray-700">
-            From: 
-          </span>
+          <span className="font-semibold text-gray-700">From:</span>
           <span className="badge badge-outline">{departure_location}</span>
           <span className="font-semibold text-gray-700">To:</span>
           <span className="badge badge-outline">{destination}</span>
@@ -48,7 +46,7 @@ const FeaturedPackageCard = ({ feature }) => {
 
         {/* total set */}
         <p className="text-sm text-gray-700 mb-1">
-          Available Seat: {total_set}
+          Available Seat: {total_set === 0 ? "Full" : total_set}
         </p>
 
         {/* Departure Date */}

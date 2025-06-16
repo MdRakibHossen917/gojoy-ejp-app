@@ -85,7 +85,7 @@ const PackageDetails = () => {
 
     const bookingData = {
       packageId: id,
-      tourName: packageData.tourName,
+      tourName: packageData.tour_name,
       price: packageData.price,
       buyerName: user.displayName || "No Name",
       buyerEmail: user.email,
@@ -97,6 +97,7 @@ const PackageDetails = () => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/bookings`, bookingData);
 
+      // Booking successful হলে এখানে increment করো
       setPackageData((prev) => ({
         ...prev,
         bookingCount: (prev.bookingCount || 0) + 1,
@@ -105,12 +106,14 @@ const PackageDetails = () => {
       Swal.fire("Success", "Booking submitted successfully!", "success");
       setShowModal(false);
       setSpecialNote("");
-      navigate("/myBookings");  
+      navigate("/myBookings");
     } catch (err) {
       console.error(err);
       Swal.fire("Error", "Already Booked This Package", "error");
     }
   };
+  
+  
 
 
   return (
@@ -142,6 +145,11 @@ const PackageDetails = () => {
           <p>
             <strong>Available Seat:</strong> {packageData.total_set}
           </p>
+          {/* Booking count */}
+          <p>
+            <strong>Booking count:</strong> {packageData.bookingCount || 0}
+          </p>
+
           <p className="  text-gray-700">
             <strong>Description:</strong> {packageData.packageDetails}
           </p>
@@ -230,9 +238,9 @@ const PackageDetails = () => {
 
               <h2
                 id="booking-modal-title"
-                className="text-3xl font-extrabold mb-8 text-red-900 text-center"
+                className="text-xl font-extrabold mb-8 text-red-900 text-center"
               >
-                Book{" "}
+                Booking Now:{" "}
                 <span className="text-green-600">{packageData.tour_name}</span>
               </h2>
 

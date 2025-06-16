@@ -29,6 +29,7 @@ const AddPackage = () => {
       guidePhoto: user?.photoURL,
       guideEmail: user?.email,
       likedBy: [],
+      booking_count: 0,
     };
 
     try {

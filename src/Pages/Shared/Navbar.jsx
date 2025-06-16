@@ -3,6 +3,7 @@ import { MdLogin } from "react-icons/md";
 import { Link, NavLink } from "react-router";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { AuthContext } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
@@ -49,10 +50,11 @@ const Navbar = () => {
   const handleSignOut = () => {
     signOutUser()
       .then(() => {
-        console.log("User Signed Out");
+        toast.success("Logged out successfully!");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
+        toast.error("Failed to log out!");
       });
   };
 
@@ -88,7 +90,7 @@ const Navbar = () => {
             <div>
               <Link to="/">
                 <img
-                  className="w-18 ml-2"
+                  className="w-18 ml-2  hidden sm:block"
                   src="https://i.ibb.co/8D4d4yK6/gojoy-logo-transparent.png"
                   alt="GoJoy Logo"
                 />

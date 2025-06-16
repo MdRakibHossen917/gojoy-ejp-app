@@ -107,7 +107,7 @@ const ManageMyPackages = () => {
             <tbody>
               {packages.map((pkg) => (
                 <tr key={pkg._id}>
-                  <td>{pkg.tourName}</td>
+                  <td>{pkg.tour_name}</td>
                   <td>{pkg.destination}</td>
                   <td>{pkg.price} BDT</td>
                   <td>{pkg.departureDate}</td>
@@ -149,7 +149,7 @@ const ManageMyPackages = () => {
               <input
                 type="text"
                 name="tourName"
-                value={selectedPackage.tourName || ""}
+                value={selectedPackage.tour_name || ""}
                 onChange={handleChange}
                 placeholder="Tour Name"
                 className="input input-bordered w-full"

@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { updateProfile } from "firebase/auth";
-
 import Swal from "sweetalert2";
 import regLottie from "../../assets/registerLottie.json";
 import Lottie from "lottie-react";
 import { AuthContext } from "../../contexts/AuthContext";
- 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -21,47 +21,41 @@ const Register = () => {
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
 
-    console.log(name, email, photoURL, password, confirmPassword);
-
-    // Validation
     if (!name || !email || !password) {
-      alert("Please fill in all required fields.");
+      toast.error("Please fill in all required fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
     if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+      toast.error("Password must be at least 6 characters long.");
       return;
     }
 
     if (!/[A-Z]/.test(password)) {
-      alert("Password must contain at least one uppercase letter.");
+      toast.error("Password must contain at least one uppercase letter.");
       return;
     }
 
     if (!/[a-z]/.test(password)) {
-      // lowercase check
-      alert("Password must contain at least one lowercase letter.");
+      toast.error("Password must contain at least one lowercase letter.");
       return;
     }
 
     if (!/[0-9]/.test(password)) {
-      alert("Password must contain at least one number.");
+      toast.error("Password must contain at least one number.");
       return;
     }
 
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      alert("Password must contain at least one special character.");
+      toast.error("Password must contain at least one special character.");
       return;
     }
-    
 
-    // Firebase signup via context
     createUser(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -70,8 +64,6 @@ const Register = () => {
           photoURL: photoURL,
         })
           .then(() => {
-            // alert("User registered successfully!");
-            // Swal.fire("register Or success");
             Swal.fire({
               position: "center",
               icon: "success",
@@ -79,7 +71,6 @@ const Register = () => {
               showConfirmButton: false,
               timer: 1500,
             });
-            // navigate("/auth/login");
             navigate("/");
           })
           .catch((error) => {
@@ -88,14 +79,13 @@ const Register = () => {
       })
       .catch((error) => {
         console.log("Signup error:", error.message);
-        alert(error.message);
+        toast.error(error.message);
       });
   };
 
   return (
     <div className="bg-base-100 min-h-screen">
-      <div className="w-full max-w-md p-10   mx-auto flex items-center justify-center">
-        {/* Lottie Animation - Only visible on large screens and up */}
+      <div className="w-full max-w-md p-10 mx-auto flex items-center justify-center">
         <div className="hidden lg:block text-center lg:text-left">
           <Lottie animationData={regLottie} loop style={{ width: "400px" }} />
         </div>

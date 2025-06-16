@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import { FiPhoneCall } from "react-icons/fi"; 
 import FeaturedPackage from "./FeaturedPackage";
 import Banner from "./Banner";
+import ExploreDestinations from "../Shared/ExploreDestinations ";
+ 
 
 const Home = () => {
   const navigate = useNavigate();
@@ -31,17 +33,10 @@ const Home = () => {
         </button>
       </div>
 
+      
+
       {/* Section 1 */}
-      <section className="my-16 px-6 max-w-6xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-6 text-indigo-600">
-          Explore More Destinations
-        </h2>
-        <p className="text-gray-700 max-w-3xl mx-auto">
-          Discover hidden gems and popular tourist spots with our exclusive
-          packages tailored just for you. Adventure, relaxation, and culture all
-          in one place.
-        </p>
-      </section>
+      <ExploreDestinations></ExploreDestinations>
 
       {/* Section 2: Customer Support */}
       <section className="my-16 px-6 max-w-6xl mx-auto bg-indigo-50 rounded-lg p-10 text-center">

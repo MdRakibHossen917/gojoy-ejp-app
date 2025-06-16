@@ -9,7 +9,7 @@ const Banner = () => {
   };
 
   return (
-    <div className="hero bg-gradient-to-r from-[#e0f7fa] to-[#fffde7]  ">
+    <div className="hero bg-gradient-to-r from-[#e0f7fa] to-[#fffde7]   ">
       <div className="hero-content flex flex-col md:flex-row items-center justify-between w-full px-6 md:px-12">
         {/* Left Side Image */}
         <div className="w-full md:w-1/2 flex justify-center">
