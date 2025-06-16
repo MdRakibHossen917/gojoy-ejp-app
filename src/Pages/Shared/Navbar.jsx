@@ -58,7 +58,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50">
+      <div className="navbar bg-neutral-content shadow-sm fixed top-0 left-0 w-full z-50">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -95,8 +95,8 @@ const Navbar = () => {
               </Link>
             </div>
             <div>
-              <h1 className="font-bold text-xl ">
-                Go<span className="text-orange-500 text-2xl">Joy</span>
+              <h1 className="font-bold text-xl  text-info-content  ">
+                Go<span className="text-warning text-2xl">Joy</span>
               </h1>
             </div>
           </div>
@@ -108,7 +108,6 @@ const Navbar = () => {
         <div className="navbar-end">
           {/*theme controller */}
           <div className="mr-1 lg:mr-3">
-           
             <input
               type="checkbox"
               value="dark"
