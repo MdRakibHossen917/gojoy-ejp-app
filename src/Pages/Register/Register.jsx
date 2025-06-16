@@ -94,7 +94,7 @@ const Register = () => {
 
   return (
     <div className="bg-base-100 min-h-screen">
-      <div className="w-full max-w-md p-10 mt-20 mx-auto flex items-center justify-center">
+      <div className="w-full max-w-md p-10   mx-auto flex items-center justify-center">
         {/* Lottie Animation - Only visible on large screens and up */}
         <div className="hidden lg:block text-center lg:text-left">
           <Lottie animationData={regLottie} loop style={{ width: "400px" }} />

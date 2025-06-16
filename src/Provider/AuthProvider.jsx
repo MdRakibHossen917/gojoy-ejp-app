@@ -9,6 +9,7 @@ import {
   signOut,
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
+import axios from "axios";
  
 
 const googleProvider = new GoogleAuthProvider();
@@ -21,18 +22,44 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
-
+  // if I log in than firstly called This
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
-      console.log("user in auth state change", currentUser);
-    });
+   
+      if (currentUser?.email) {
 
-    return () => {
-      unSubscribe();
-    };
+        axios
+          .post(
+            `${import.meta.env.VITE_API_URL}/jwt`,
+            {
+              email: currentUser.email,
+            },
+            {
+              withCredentials: true, //mandatory to store token in Browser cookie
+            }
+          )
+          .then((res) => {
+            // localStorage.setItem("token", res.data.token); // to store in localstorage in browser only
+         
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.error("JWT token fetch error", err);
+            localStorage.removeItem("token"); // safety
+          });
+      } else {
+        localStorage.removeItem('token');
+      }
+  
+      setLoading(false);
+    });
+  
+    return () => unSubscribe();
   }, []);
+  
+
+    
 
   const signInUser = (email, password) => {
     setLoading(true);
@@ -45,6 +72,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const signOutUser = () => {
+    localStorage.removeItem("token");
     setLoading(true);
     return signOut(auth);
   };

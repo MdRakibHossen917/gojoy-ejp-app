@@ -108,7 +108,7 @@ const PackageDetails = () => {
       navigate("/myBookings");  
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Already You Booking This Package", "error");
+      Swal.fire("Error", "Already Booked This Package", "error");
     }
   };
 

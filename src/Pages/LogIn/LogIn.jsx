@@ -32,7 +32,7 @@ const LogIn = () => {
   };
 
   return (
-    <div className="hero bg-base-200 p-10 mt-20 ">
+    <div className="hero bg-base-200 p-10 ">
       <div className="hero-content flex-col lg:flex-row-reverse my-auto">
         <div className="card bg-base-100 w-full max-w-sm p-6 shadow-2xl">
           <div className="card-body">

@@ -1,37 +1,45 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooksAxious/useAxiousSecure";
 
 const MyBookings = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
+  const axiosSecure = useAxiosSecure();
 
   const fetchBookings = () => {
     if (!user?.email) return;
 
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/bookings?buyerEmail=${user.email}`)
-      .then((res) => setBookings(res.data))
-      .catch((err) => console.error(err));
+    axiosSecure
+      .get(`/bookings?buyerEmail=${user.email}`)
+      .then((res) => {
+        setBookings(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire("Error", "Failed to load bookings", "error");
+      });
   };
 
   useEffect(() => {
     fetchBookings();
-  }, [user?.email]);
+  }, [user?.email]); // axiosSecure static, তাই এখানে রাখা লাগবে না
 
   if (!user) return <p>Please login to see your bookings</p>;
 
   // Confirm Booking Function
   const handleConfirm = async (bookingId) => {
     try {
-      const res = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/bookings/${bookingId}`,
-        { status: "confirmed" }
-      );
-      if (res.data.success || res.data.modifiedCount > 0) {
+      const res = await axiosSecure.patch(`/bookings/${bookingId}`, {
+        status: "confirmed",
+      });
+
+      if (res.data.modifiedCount > 0) {
         Swal.fire("Success", "Booking confirmed successfully!", "success");
         fetchBookings();
+      } else {
+        Swal.fire("Warning", "No changes made", "warning");
       }
     } catch (error) {
       console.error("Error confirming booking", error);
@@ -52,9 +60,7 @@ const MyBookings = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await axios.delete(
-            `${import.meta.env.VITE_API_URL}/bookings/${bookingId}`
-          );
+          const res = await axiosSecure.delete(`/bookings/${bookingId}`);
           if (res.data.deletedCount > 0) {
             Swal.fire("Deleted!", "Booking has been deleted.", "success");
             fetchBookings();
