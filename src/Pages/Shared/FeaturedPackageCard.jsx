@@ -39,7 +39,7 @@ const FeaturedPackageCard = ({ feature }) => {
         {/* Departure & Destination */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
           <span className="font-semibold text-gray-700">
-            From:{departure_location}
+            From: 
           </span>
           <span className="badge badge-outline">{departure_location}</span>
           <span className="font-semibold text-gray-700">To:</span>

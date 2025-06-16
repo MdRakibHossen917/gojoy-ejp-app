@@ -106,6 +106,15 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-end">
+          {/*theme controller */}
+          <div className="mr-1 lg:mr-3">
+           
+            <input
+              type="checkbox"
+              value="dark"
+              className="toggle theme-controller"
+            />
+          </div>
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <div

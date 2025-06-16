@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 
 const PackageDetails = () => {
@@ -12,6 +12,7 @@ const PackageDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [specialNote, setSpecialNote] = useState("");
   const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -104,11 +105,13 @@ const PackageDetails = () => {
       Swal.fire("Success", "Booking submitted successfully!", "success");
       setShowModal(false);
       setSpecialNote("");
+      navigate("/myBookings");  
     } catch (err) {
       console.error(err);
       Swal.fire("Error", "Already You Booking This Package", "error");
     }
   };
+
 
   return (
     <div className="max-w-4xl mx-auto p-5 my-10">
@@ -227,10 +230,10 @@ const PackageDetails = () => {
 
               <h2
                 id="booking-modal-title"
-                className="text-3xl font-extrabold mb-8 text-gray-900 text-center"
+                className="text-3xl font-extrabold mb-8 text-red-900 text-center"
               >
                 Book{" "}
-                <span className="text-green-600">{packageData.tourName}</span>
+                <span className="text-green-600">{packageData.tour_name}</span>
               </h2>
 
               <form onSubmit={handleBookingSubmit} className="space-y-6">
@@ -245,7 +248,7 @@ const PackageDetails = () => {
                   <input
                     id="tourName"
                     type="text"
-                    value={packageData.tourName}
+                    value={packageData.tour_name}
                     disabled
                     className="input input-bordered w-full bg-gray-100 cursor-not-allowed border-gray-300 rounded-lg shadow-sm"
                   />
