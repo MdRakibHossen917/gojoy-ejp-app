@@ -8,13 +8,12 @@ const AddPackage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const handleAddPackage = (e) => {
+  const handleAddPackage = async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const newAddPackage = Object.fromEntries(formData.entries());
 
-    // mapping fields as per backend requirement
     const packageData = {
       tour_name: newAddPackage.tourName,
       image: newAddPackage.image,
@@ -32,25 +31,38 @@ const AddPackage = () => {
       likedBy: [],
     };
 
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/add-tour-packages`, packageData)
-      .then((data) => {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Package Added Successful",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-        navigate("/");
-      })
-      .catch((err) => {
-        console.error(
-          "Error adding package:",
-          err.response?.data || err.message
-        );
-        Swal.fire("Error", "Failed to add package", "error");
+    try {
+      // ✅ 1. Firebase ID token collect (because our backend use Firebase admin verifyIdToken)
+      const token = await user.getIdToken();
+
+      // ✅ 2. Send request with Authorization header
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/add-tour-packages`,
+        packageData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Package Added Successfully",
+        showConfirmButton: false,
+        timer: 1000,
       });
+
+      navigate("/");
+    } catch (err) {
+      console.error("Error adding package:", err.response?.data || err.message);
+      Swal.fire(
+        "Error",
+        err?.response?.data?.error || "Failed to add package",
+        "error"
+      );
+    }
   };
 
   return (

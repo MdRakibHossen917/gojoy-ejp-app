@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooksAxious/useAxiousSecure";
 
 const ManageMyPackages = () => {
   const { user } = useAuth();
   const [packages, setPackages] = useState([]);
+  const axiosSecure = useAxiosSecure();
 
-  //Medal and Select Package State
+  // Modal and Select Package State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
 
+  // Fetch packages with axiosSecure
   useEffect(() => {
     if (user?.email) {
-      axios
-        .get(`${import.meta.env.VITE_API_URL}/manage-my-packages/${user.email}`)
+      axiosSecure
+        .get(`/manage-my-packages/${user.email}`)
         .then((res) => setPackages(res.data))
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          Swal.fire("Error", "Failed to load packages", "error");
+        });
     }
-  }, [user?.email]);
+  }, [user?.email, axiosSecure]);
 
+  // Delete Package
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -31,8 +37,8 @@ const ManageMyPackages = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete(`${import.meta.env.VITE_API_URL}/packages/${id}`)
+        axiosSecure
+          .delete(`/packages/${id}`)
           .then(() => {
             setPackages((prev) => prev.filter((pkg) => pkg._id !== id));
             Swal.fire("Deleted!", "Package has been deleted.", "success");
@@ -44,7 +50,7 @@ const ManageMyPackages = () => {
     });
   };
 
-  // Clicking on the Edit button opens the modal.
+  // Edit Click
   const handleEditClick = (pkg) => {
     setSelectedPackage(pkg);
     setIsModalOpen(true);
@@ -55,18 +61,20 @@ const ManageMyPackages = () => {
     setSelectedPackage(null);
   };
 
+  // Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSelectedPackage({ ...selectedPackage, [name]: value });
   };
 
+  // Update Package
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
     const id = selectedPackage._id;
-    const { _id, ...updateData } = selectedPackage;  
+    const { _id, ...updateData } = selectedPackage;
 
-    axios
-      .patch(`${import.meta.env.VITE_API_URL}/packages/${id}`, updateData)
+    axiosSecure
+      .patch(`/packages/${id}`, updateData)
       .then(() => {
         Swal.fire("Success!", "Package updated successfully", "success");
         setPackages((prev) =>

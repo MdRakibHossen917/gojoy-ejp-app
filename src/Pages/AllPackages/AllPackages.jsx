@@ -11,17 +11,35 @@ const AllPackages = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/packages`)
-      .then((res) => {
+    const fetchPackages = async () => {
+      setLoading(true);
+      try {
+        let config = {};
+
+        
+        if (user) {
+          const idToken = await user.getIdToken();
+          config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          };
+        }
+
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/packages`,
+          config
+        );
         setPackages(res.data);
+      } catch (err) {
+        console.error("Failed to fetch packages:", err);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchPackages();
+  }, [user]);
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
