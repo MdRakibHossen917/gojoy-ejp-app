@@ -4,6 +4,7 @@ import { FiPhoneCall } from "react-icons/fi";
 import FeaturedPackage from "./FeaturedPackage";
 import Banner from "./Banner";
 import ExploreDestinations from "../Shared/ExploreDestinations ";
+import DiscountBanner from "../Shared/DiscountBanner";
  
 
 const Home = () => {
@@ -27,20 +28,20 @@ const Home = () => {
       <div className="text-center mt-8">
         <button
           onClick={() => navigate("/allPackages")}
-          className="btn btn-primary px-8"
+          className="btn btn-primary px-8 my-2"
         >
           Show All
         </button>
       </div>
-
-      
-
       {/* Section 1 */}
+      <DiscountBanner></DiscountBanner>
+
+      {/* Section 2 */}
       <ExploreDestinations></ExploreDestinations>
 
-      {/* Section 2: Customer Support */}
-      <section className="my-16 px-6 max-w-6xl mx-auto bg-indigo-50 rounded-lg p-10 text-center">
-        <h2 className="text-3xl font-bold mb-6 text-indigo-700">
+      {/* Section 3: Customer Support */}
+      <section className="my-16 px-6 max-w-6xl mx-auto bg-indigo-50 rounded-lg p-5 text-center">
+        <h2 className="text-3xl font-bold mb-2 text-indigo-700">
           Customer Support
         </h2>
         <p className="text-gray-700 max-w-3xl mx-auto mb-4">
@@ -48,7 +49,7 @@ const Home = () => {
           bookings, answer questions, and provide travel assistance.
         </p>
         <button
-          className="btn btn-outline btn-indigo"
+          className="btn btn-outline btn-primary"
           onClick={() => setIsModalOpen(true)}
         >
           Contact Us

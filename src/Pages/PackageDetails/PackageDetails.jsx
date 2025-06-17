@@ -72,9 +72,8 @@ const PackageDetails = () => {
       Swal.fire("Error", "Failed to toggle like", "error");
     }
   };
-  
 
-  // Booking submit handler (unchanged)
+  // Booking submit handler  
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
 
@@ -97,7 +96,7 @@ const PackageDetails = () => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/bookings`, bookingData);
 
-      // Booking successful হলে এখানে increment করো
+     
       setPackageData((prev) => ({
         ...prev,
         bookingCount: (prev.bookingCount || 0) + 1,
@@ -112,9 +111,6 @@ const PackageDetails = () => {
       Swal.fire("Error", "Already Booked This Package", "error");
     }
   };
-  
-  
-
 
   return (
     <div className="max-w-4xl mx-auto p-5 my-10">
@@ -143,15 +139,11 @@ const PackageDetails = () => {
             <strong>Destination:</strong> {packageData.destination}
           </p>
           <p>
-            <strong>Available Seat:</strong> {packageData.total_set}
-          </p>
-          {/* Booking count */}
-          <p>
-            <strong>Booking count:</strong> {packageData.bookingCount || 0}
+            <strong>Available Booking-Count :</strong> {packageData.total_set}
           </p>
 
-          <p className="  text-gray-700">
-            <strong>Description:</strong> {packageData.packageDetails}
+          <p className="  text-gray-700 mb-2">
+            <strong>Description:</strong> {packageData.package_details}
           </p>
         </div>
 

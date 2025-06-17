@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import useAuth from "../../hooks/useAuth"; // your auth hook
+import useAuth from "../../hooks/useAuth";
 
 const AllPackages = () => {
   const [packages, setPackages] = useState([]);
@@ -16,13 +16,10 @@ const AllPackages = () => {
       try {
         let config = {};
 
-        
         if (user) {
           const idToken = await user.getIdToken();
-          config = {
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
+          config.headers = {
+            Authorization: `Bearer ${idToken}`,
           };
         }
 
@@ -52,7 +49,7 @@ const AllPackages = () => {
 
   const handleViewDetails = (id) => {
     if (!user) {
-      navigate("/login");
+      navigate("/auth/logIn", { state: { from: `/packages/${id}` } });
     } else {
       navigate(`/packages/${id}`);
     }
@@ -91,15 +88,6 @@ const AllPackages = () => {
               />
               <h3 className="text-xl font-semibold">{pkg.tour_name}</h3>
 
-              <div className="flex items-center gap-3 mt-2">
-                <img
-                  src={pkg.guidePhoto}
-                  alt={pkg.guideName}
-                  className="w-10 h-10 rounded-full object-cover border"
-                />
-                <span>{pkg.guideName}</span>
-              </div>
-
               <p className="mt-2">
                 <strong>Duration:</strong> {pkg.duration}
               </p>
@@ -109,6 +97,24 @@ const AllPackages = () => {
               <p>
                 <strong>Price:</strong> {pkg.price} BDT
               </p>
+              
+              {/* Guide Info */}
+              <div className="flex items-center gap-3 mb-4 bg-gray-100 p-3 rounded-lg shadow-sm">
+                <div className="relative">
+                  <img
+                    src={pkg.guidePhoto}
+                    alt={pkg.guideName}
+                    className="w-12 h-12 rounded-full border-4 border-primary object-cover"
+                  />
+                  <span className="absolute bottom-0 right-0 w-3 h-3  rounded-full   border-white"></span>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800">
+                    {pkg.guideName}
+                  </h4>
+                  <p className="text-sm text-gray-500">Tour Guide</p>
+                </div>
+              </div>
 
               <button
                 className="btn btn-primary mt-4 w-full"

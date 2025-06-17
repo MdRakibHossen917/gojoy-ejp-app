@@ -16,7 +16,7 @@ const FeaturedPackage = ({ featuredPackagePromise }) => {
       <h2 className="text-4xl text-center my-2 font-bold">
         Feature of the Package  
       </h2>
-      <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 ">
         {features.map((feature) => (
           <FeaturedPackageCard key={feature._id} feature={feature} />
         ))}

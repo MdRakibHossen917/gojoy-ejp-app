@@ -6,10 +6,10 @@ import useAxiosSecure from "../../hooksAxious/useAxiousSecure";
 const MyBookings = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
-  const [packagesMap, setPackagesMap] = useState({}); // packageId => package details
+  const [packagesMap, setPackagesMap] = useState({});  
   const axiosSecure = useAxiosSecure();
 
-  // Fetch bookings + packages data
+  // Fetch bookings and packages data
   const fetchBookings = async () => {
     if (!user?.email) return;
 

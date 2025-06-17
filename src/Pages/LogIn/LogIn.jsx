@@ -10,7 +10,9 @@ const LogIn = () => {
   const { signInUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || "/";
+
+   
+  const from = location.state?.from || "/";
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -19,9 +21,9 @@ const LogIn = () => {
     const password = form.password.value;
 
     signInUser(email, password)
-      .then((result) => {
+      .then(() => {
         toast.success("Logged in successfully!");
-        navigate(from, { replace: true });
+        navigate(from, { replace: true });  
       })
       .catch((error) => {
         toast.error(`Login Failed: ${error.message}`);
@@ -29,7 +31,7 @@ const LogIn = () => {
   };
 
   return (
-    <div className="hero bg-base-200 p-10 ">
+    <div className="hero bg-base-200 p-10">
       <div className="hero-content flex-col lg:flex-row-reverse my-auto">
         <div className="card bg-base-100 w-full max-w-sm p-6 shadow-2xl">
           <div className="card-body">

@@ -30,19 +30,36 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink to="/" className="text-neutral-700 hover:text-neutral-900">
+          Home
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/allPackages">All Packages</NavLink>
+        <NavLink
+          to="/allPackages"
+          className="text-neutral-700 hover:text-neutral-900"
+        >
+          All Packages
+        </NavLink>
       </li>
 
       {user && (
         <li>
-          <NavLink to="myBookings">My Bookings</NavLink>
+          <NavLink
+            to="/myBookings"
+            className="text-neutral-700 hover:text-neutral-900"
+          >
+            My Bookings
+          </NavLink>
         </li>
       )}
       <li>
-        <NavLink to="/aboutUs">About Us</NavLink>
+        <NavLink
+          to="/aboutUs"
+          className="text-neutral-700 hover:text-neutral-900"
+        >
+          About Us
+        </NavLink>
       </li>
     </>
   );
@@ -90,7 +107,7 @@ const Navbar = () => {
             <div>
               <Link to="/">
                 <img
-                  className="w-18 ml-2  hidden sm:block"
+                  className="w-14 ml-2  hidden sm:block"
                   src="https://i.ibb.co/8D4d4yK6/gojoy-logo-transparent.png"
                   alt="GoJoy Logo"
                 />
@@ -153,14 +170,14 @@ const Navbar = () => {
                       alt="Profile"
                       className="w-16 h-16 rounded-full mx-auto"
                     />
-                    <p className="font-semibold my-2">{user.email}</p>
+                    <p className="font-semibold text-info my-2">{user.email}</p>
                     <hr className="my-2" />
 
                     <ul className="space-y-2 text-left">
                       <li>
                         <NavLink
                           to="/addPackage"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                          className="block px-4 py-2 text-sm text-neutral hover:bg-gray-100 rounded"
                         >
                           Add Package
                         </NavLink>
@@ -168,7 +185,7 @@ const Navbar = () => {
                       <li>
                         <NavLink
                           to="/manage-my-packages"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                          className="block px-4 py-2 text-sm text-neutral hover:bg-gray-100 rounded"
                         >
                           Manage My Packages
                         </NavLink>
@@ -176,7 +193,7 @@ const Navbar = () => {
                       <li>
                         <button
                           onClick={handleSignOut}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                          className="w-full text-left px-4 py-2 text-sm text-neutral hover:bg-gray-100 rounded"
                         >
                           LogOut
                         </button>

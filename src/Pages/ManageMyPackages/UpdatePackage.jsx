@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router"; // react-router-dom থেকে import করতে হবে
+import { useParams, useNavigate } from "react-router"; 
 import axios from "axios";
 import Swal from "sweetalert2";
 

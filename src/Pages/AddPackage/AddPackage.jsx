@@ -33,10 +33,10 @@ const AddPackage = () => {
     };
 
     try {
-      // ✅ 1. Firebase ID token collect (because our backend use Firebase admin verifyIdToken)
+      //  Firebase ID token collect
       const token = await user.getIdToken();
 
-      // ✅ 2. Send request with Authorization header
+      // Send request with Authorization header
       await axios.post(
         `${import.meta.env.VITE_API_URL}/add-tour-packages`,
         packageData,

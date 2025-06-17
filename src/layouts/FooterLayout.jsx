@@ -6,7 +6,7 @@ import Footer from "../Pages/Shared/Footer";
 const FooterLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="mt-22">
+      <div className="mt-18">
         <Navbar />
       </div>
       <div className="flex-grow">
