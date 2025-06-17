@@ -10,7 +10,6 @@ import {
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import axios from "axios";
- 
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -22,44 +21,34 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
-  // if I log in than firstly called This
-  useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-   
-      if (currentUser?.email) {
 
-        axios
-          .post(
-            `${import.meta.env.VITE_API_URL}/jwt`,
-            {
-              email: currentUser.email,
-            },
-            {
-              withCredentials: true, //mandatory to store token in Browser cookie
-            }
-          )
-          .then((res) => {
-            // localStorage.setItem("token", res.data.token); // to store in localstorage in browser only
-         
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.error("JWT token fetch error", err);
-            localStorage.removeItem("token"); // safety
-          });
+  useEffect(() => {
+    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+
+      if (currentUser?.email) {
+        try {
+          const token = await currentUser.getIdToken();
+          localStorage.setItem("token", token); // Store Firebase Token
+
+          // Optionally, call some protected API here, passing token in header
+          // Example:
+          // await axios.get(`${import.meta.env.VITE_API_URL}/packages`, {
+          //   headers: { Authorization: `Bearer ${token}` }
+          // });
+        } catch (err) {
+          console.error("Error getting Firebase token", err);
+          localStorage.removeItem("token");
+        }
       } else {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
       }
-  
       setLoading(false);
     });
-  
+
     return () => unSubscribe();
   }, []);
   
-
-    
 
   const signInUser = (email, password) => {
     setLoading(true);

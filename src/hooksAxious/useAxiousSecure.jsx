@@ -1,41 +1,50 @@
 import axios from "axios";
-
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import auth from "../firebase/firebase.config";  
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
-const useAxiousSecure = () => {
-  const { user, signOutUser } = useContext(AuthContext);
-  //   const token = localStorage.getItem("token");
-  const token = user?.accessToken;
-  //intercept request
-  axiosInstance.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${token}`;
+const useAxiosSecure = () => {
+  const { signOutUser } = useContext(AuthContext);
 
-    return config;
-  });
+  useEffect(() => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      async (config) => {
+        const user = auth.currentUser;
+        if (user) {
+          const token = await user.getIdToken();
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-  axiosInstance.interceptors.response.use(
-    (res) => res,
-    (err) => {
-      if (err.status === 401 || err.status === 403) {
-        signOutUser()
-          .then(() => {
-            console.log(
-              `you are logged out bcz of an error with ${err.status} code`
-            );
-          })
-          .catch((err) => console.log(err));
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          signOutUser()
+            .then(() => {
+              console.warn("User logged out due to 401/403");
+            })
+            .catch((err) => console.error("Logout failed", err));
+        }
+        return Promise.reject(error);
       }
-      return Promise.reject(err);
-    }
-  );
+    );
+
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [signOutUser]);
 
   return axiosInstance;
 };
 
-export default useAxiousSecure;
+export default useAxiosSecure;

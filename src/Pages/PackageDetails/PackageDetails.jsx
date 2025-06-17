@@ -94,9 +94,18 @@ const PackageDetails = () => {
     };
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/bookings`, bookingData);
+      const idToken = await user.getIdToken();
 
-     
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/bookings`,
+        bookingData,
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
+
       setPackageData((prev) => ({
         ...prev,
         bookingCount: (prev.bookingCount || 0) + 1,
@@ -107,10 +116,15 @@ const PackageDetails = () => {
       setSpecialNote("");
       navigate("/myBookings");
     } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "Already Booked This Package", "error");
+      console.error(err.response?.data || err.message);
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Failed to book package",
+        "error"
+      );
     }
   };
+  
 
   return (
     <div className="max-w-4xl mx-auto p-5 my-10">
