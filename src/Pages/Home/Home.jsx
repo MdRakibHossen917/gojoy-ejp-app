@@ -10,9 +10,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const featuredPackagePromise = fetch(
-    "https://gojoy-app-server.vercel.app//packages"
-  ).then((res) => res.json());
+  const featuredPackagePromise = fetch("http://localhost:5000/packages").then(
+    (res) => res.json()
+  );
 
   return (
     <div>

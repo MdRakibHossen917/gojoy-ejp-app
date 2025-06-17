@@ -28,10 +28,12 @@ const BookingPageApply = () => {
     };
 
     try {
+      
       const token = await user.getIdToken();
 
+        
       const res = await axios.post(
-        "https://gojoy-app-server.vercel.app//add-tour-packages",
+        "http://localhost:5000/add-tour-packages",
         tourPackage,
         {
           headers: {
