@@ -1,19 +1,18 @@
 import React, { Suspense, useState } from "react";
 import { useNavigate } from "react-router";
-import { FiPhoneCall } from "react-icons/fi"; 
+import { FiPhoneCall } from "react-icons/fi";
 import FeaturedPackage from "./FeaturedPackage";
 import Banner from "./Banner";
 import ExploreDestinations from "../Shared/ExploreDestinations ";
 import DiscountBanner from "../Shared/DiscountBanner";
- 
 
 const Home = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const featuredPackagePromise = fetch("http://localhost:5000/packages").then(
-    (res) => res.json()
-  );
+  const featuredPackagePromise = fetch(
+    "https://gojoy-app-server.vercel.app//packages"
+  ).then((res) => res.json());
 
   return (
     <div>
