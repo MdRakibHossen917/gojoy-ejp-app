@@ -11,8 +11,6 @@ const LogIn = () => {
   const { signInUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-
-   
   const from = location.state?.from || "/";
 
   const handleSignIn = (e) => {
@@ -24,7 +22,7 @@ const LogIn = () => {
     signInUser(email, password)
       .then(() => {
         toast.success("Logged in successfully!");
-        navigate(from, { replace: true });  
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         toast.error(`Login Failed: ${error.message}`);
@@ -32,68 +30,82 @@ const LogIn = () => {
   };
 
   return (
-    <div className="hero bg-base-200 p-10">
-      <div className="hero-content flex-col lg:flex-row-reverse my-auto">
-        <div className="card bg-base-100 w-full max-w-sm p-6 shadow-2xl">
-          <div className="card-body">
-            <div className="text-center text-gray-800 mb-4">
-              <h2 className="text-3xl font-bold mb-1">Please Sign in</h2>
-              <p>You need to Sign in first to continue</p>
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+      <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10">
+        {/* Animation (hidden on mobile) */}
+        <div className="hidden lg:block flex-1">
+          <Lottie
+            animationData={logInLottie}
+            loop
+            style={{ maxWidth: "500px", margin: "0 auto" }}
+          />
+        </div>
+
+        {/* Form Card */}
+        <div className="flex-1 w-full">
+          <div className="card w-full bg-base-100 shadow-xl p-6 sm:p-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+                Welcome Back
+              </h2>
+              <p className="text-gray-500 text-sm md:text-base">
+                Sign in to continue to your account
+              </p>
             </div>
 
-            <form onSubmit={handleSignIn}>
-              <SocialLogIn from={from}></SocialLogIn>
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <SocialLogIn from={from} />
               <div className="divider">OR</div>
 
-              <label htmlFor="email" className="label">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="input w-full"
-                placeholder="Email"
-                required
-              />
-
-              <label htmlFor="password" className="label mt-2">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                className="input w-full"
-                placeholder="Password"
-                required
-              />
-
-              <div className="mt-2 mb-4">
-                <a className="link link-hover text-sm">Forgot password?</a>
+              <div>
+                <label htmlFor="email" className="block mb-1 font-medium">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="input input-bordered w-full"
+                  placeholder="Enter your email"
+                  required
+                />
               </div>
+
+              <div>
+                <label htmlFor="password" className="block mb-1 font-medium">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="input input-bordered w-full"
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+
+              <div className="text-right">
+                <a href="#" className="text-sm text-blue-600 hover:underline">
+                  Forgot password?
+                </a>
+              </div>
+
               <Button type="submit" className="w-full">
-               
                 Log In
               </Button>
 
-             
-
-              <p className="text-center text-gray-800 mt-4">
-                Don&apos;t have an account?{" "}
+              <p className="text-center text-gray-700 text-sm mt-4">
+                Don’t have an account?{" "}
                 <Link
                   to="/auth/register"
-                  className="ml-1 text-[#00697F] underline font-bold"
+                  className="text-[#00697F] font-semibold underline ml-1"
                 >
                   Register
                 </Link>
               </p>
             </form>
           </div>
-        </div>
-
-        <div className="hidden lg:block text-center lg:text-left">
-          <Lottie animationData={logInLottie} loop style={{ width: "400px" }} />
         </div>
       </div>
     </div>

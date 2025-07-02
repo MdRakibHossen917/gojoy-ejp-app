@@ -31,29 +31,29 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-        <NavLink to="/" className="hover:text-yellow-300">
+        <NavLink to="/" >
           Home
         </NavLink>
       </li>
       <li>
-        <NavLink to="/allPackages" className="hover:text-yellow-300">
+        <NavLink to="/allPackages">
           All Packages
         </NavLink>
       </li>
       {user && (
         <li>
-          <NavLink to="/myBookings" className="hover:text-yellow-300">
+          <NavLink to="/myBookings" >
             My Bookings
           </NavLink>
         </li>
       )}
       <li>
-        <NavLink to="/blogs" className="hover:text-yellow-300">
+        <NavLink to="/blogs" >
           Blogs
         </NavLink>
       </li>
       <li>
-        <NavLink to="/aboutUs" className="hover:text-yellow-300">
+        <NavLink to="/aboutUs" >
           About Us
         </NavLink>
       </li>
@@ -61,7 +61,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar bg-[#00809D] text-white border-b border-base-200 fixed top-0 w-full z-50 shadow-sm">
+    <div className="navbar bg-[#00809D] text-white   fixed top-0 w-full z-50  ">
       <div className="navbar-start">
         {/* Mobile Menu */}
         <div className="dropdown relative">
@@ -99,12 +99,12 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-end flex items-center gap-2 pr-4">
-        {/* Theme Toggle */}
+        {/* Theme Toggle - Small Size */}
         <label className="cursor-pointer flex items-center">
           <input
             type="checkbox"
             value="dark"
-            className="toggle theme-controller"
+            className="toggle theme-controller scale-75 sm:scale-90 md:scale-100 transition duration-200"
           />
         </label>
 
@@ -148,7 +148,7 @@ const Navbar = () => {
                   <p className="text-sm font-medium mt-2">{user.email}</p>
                 </div>
 
-                <hr className="my-2 border-gray-300 dark:border-white/20" />
+                
 
                 <ul className="space-y-2">
                   <li>
@@ -180,9 +180,13 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          <Button className="border-yellow-600 shadow-none">
-            <Link to="/auth/logIn" className="flex gap-1 items-center">
-              <MdLogin size={22} /> Log In
+          <Button className=" shadow px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 lg:px-6 lg:py-3 text-sm sm:text-base md:text-lg">
+            <Link
+              to="/auth/logIn"
+              className="flex items-center gap-1 sm:gap-2 md:gap-2.5"
+            >
+              <MdLogin className="text-base sm:text-lg md:text-xl" />
+              <span>Log In</span>
             </Link>
           </Button>
         )}

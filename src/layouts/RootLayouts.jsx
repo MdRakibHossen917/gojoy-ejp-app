@@ -6,7 +6,7 @@ import Footer from "../Pages/Shared/Footer";
 const RootLayouts = () => {
   return (
     <div className="bg-white">
-      <div className="mt-23">
+      <div className="mt-18">
         <Navbar />
       </div>
       <div className="min-h-[calc(100vh-72px)]">

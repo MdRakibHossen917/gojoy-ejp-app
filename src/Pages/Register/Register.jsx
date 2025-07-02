@@ -22,41 +22,37 @@ const Register = () => {
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
 
+    // Validation
     if (!name || !email || !password) {
       toast.error("Please fill in all required fields.");
       return;
     }
-
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-
     if (password.length < 6) {
       toast.error("Password must be at least 6 characters long.");
       return;
     }
-
     if (!/[A-Z]/.test(password)) {
       toast.error("Password must contain at least one uppercase letter.");
       return;
     }
-
     if (!/[a-z]/.test(password)) {
       toast.error("Password must contain at least one lowercase letter.");
       return;
     }
-
     if (!/[0-9]/.test(password)) {
       toast.error("Password must contain at least one number.");
       return;
     }
-
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
       toast.error("Password must contain at least one special character.");
       return;
     }
 
+    // Create user
     createUser(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -85,86 +81,106 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-base-100 min-h-screen">
-      <div className="w-full max-w-md p-10 mx-auto flex items-center justify-center">
-        <div className="hidden lg:block text-center lg:text-left">
-          <Lottie animationData={regLottie} loop style={{ width: "400px" }} />
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-6xl w-full flex flex-col-reverse lg:flex-row items-center gap-10">
+        {/* Animation Section */}
+        <div className="hidden lg:flex flex-1 justify-center">
+          <Lottie
+            animationData={regLottie}
+            loop
+            style={{ maxWidth: "500px", width: "100%" }}
+          />
         </div>
-        <div className="card w-full max-w-sm shrink-0 shadow-2xl">
-          <div className="card-body bg-base-100">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-800">
+        {/* Form Section */}
+        <div className="flex-1 w-full">
+          <div className="card w-full max-w-md mx-auto bg-base-100 shadow-xl p-6 sm:p-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                 Create a new account
               </h2>
-              <p className="text-sm text-center text-gray-600">
-                Already have an account?
+              <p className="text-sm text-gray-600 mt-1">
+                Already have an account?{" "}
                 <Link
                   to="/auth/login"
-                  className="ml-1 text-[#00697F] underline font-bold"
+                  className="text-[#00697F] font-semibold underline ml-1"
                 >
                   Log In
-                </Link>{" "}
-                here
+                </Link>
               </p>
             </div>
 
-            <form onSubmit={handlerRegister} className="space-y-2">
+            <form onSubmit={handlerRegister} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-1"
+                >
                   Full Name
                 </label>
                 <input
                   type="text"
                   name="name"
                   required
-                  className="w-full px-3 py-2 border rounded-md border-[#e5e5e5]"
+                  className="input input-bordered w-full"
                   placeholder="John Doe"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-1"
+                >
                   Email Address
                 </label>
                 <input
                   type="email"
                   name="email"
                   required
-                  className="w-full px-3 py-2 border rounded-md border-[#e5e5e5]"
+                  className="input input-bordered w-full"
                   placeholder="example@gmail.com"
                 />
               </div>
               <div>
-                <label htmlFor="photoURL" className="block text-sm">
+                <label
+                  htmlFor="photoURL"
+                  className="block text-sm font-medium mb-1"
+                >
                   Photo URL
                 </label>
                 <input
                   type="text"
                   name="photoURL"
-                  className="w-full px-3 py-2 border rounded-md border-[#e5e5e5]"
+                  className="input input-bordered w-full"
                   placeholder="https://..."
                 />
               </div>
               <div>
-                <label htmlFor="password" className="block text-sm">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium mb-1"
+                >
                   Password
                 </label>
                 <input
                   type="password"
                   name="password"
                   required
-                  className="w-full px-3 py-2 border rounded-md border-[#e5e5e5]"
+                  className="input input-bordered w-full"
                   placeholder="Password"
                 />
               </div>
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium mb-1"
+                >
                   Confirm Password
                 </label>
                 <input
                   type="password"
                   name="confirmPassword"
                   required
-                  className="w-full px-3 py-2 border rounded-md border-[#e5e5e5]"
+                  className="input input-bordered w-full"
                   placeholder="Confirm Password"
                 />
               </div>
