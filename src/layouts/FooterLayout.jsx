@@ -9,9 +9,10 @@ const FooterLayout = () => {
       <div className="mt-18">
         <Navbar />
       </div>
-      <div className="flex-grow">
+      <div className="flex-grow min-h-screen">
         <Outlet />
       </div>
+
       <Footer />
     </div>
   );

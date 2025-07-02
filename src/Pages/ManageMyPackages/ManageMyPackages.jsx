@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooksAxious/useAxiousSecure";
+import Button from "../Shared/Button";
 
 const ManageMyPackages = () => {
   const { user } = useAuth();
@@ -89,7 +90,13 @@ const ManageMyPackages = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-5 my-10">
-      <h2 className="text-3xl font-bold mb-6 text-center">My Packages</h2>
+      <h2 className="text-3xl font-bold mb-2 text-[#00809D] text-center">
+        My Packages
+      </h2>
+      <p className="text-center text-gray-600 mb-6 max-w-md mx-auto">
+        Manage and update all your created tour packages from here.
+      </p>
+
       {packages.length === 0 ? (
         <p className="text-center text-gray-500">No packages found.</p>
       ) : (
@@ -114,14 +121,14 @@ const ManageMyPackages = () => {
                   <td>
                     <div className="flex gap-2">
                       <button
-                        className="btn btn-sm btn-info"
+                        className="  btn-info"
                         onClick={() => handleEditClick(pkg)}
                       >
-                        Edit
+                        <Button> Edit</Button>
                       </button>
                       <button
                         onClick={() => handleDelete(pkg._id)}
-                        className="btn btn-sm btn-error"
+                        className="btn text-white btn-error"
                       >
                         Delete
                       </button>

@@ -33,7 +33,7 @@ const BookingPageApply = () => {
 
         
       const res = await axios.post(
-        "http://localhost:5000/add-tour-packages",
+        "https://gojoy-app-server.vercel.app/add-tour-packages",
         tourPackage,
         {
           headers: {

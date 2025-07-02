@@ -21,6 +21,7 @@ import PrivateRoute from "../routes/PrivateRoutes";
 import BookingPageApply from "../Pages/BookingPageApply/BookingPageApply";
 import UpdatePackage from "../Pages/ManageMyPackages/UpdatePackage";
 import axios from "axios";
+import Blogs from "../Pages/Shared/Blogs";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "allPackages", element: <AllPackages /> },
       { path: "aboutUs", element: <AboutUs /> },
+      { path: "/blogs", element: <Blogs /> },
       {
         path: "packages/:id",
         element: (

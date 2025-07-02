@@ -4,211 +4,188 @@ import { Link, NavLink } from "react-router";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import Button from "./Button";
+import logo from "../../assets/logo.png";
 
 const Navbar = () => {
-  const { user, signOutUser } = useContext(AuthContext);
+  const { user, loading, signOutUser } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  // Dropdown wrapper ref
   const dropdownRef = useRef();
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
-
     window.addEventListener("click", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
+    return () => window.removeEventListener("click", handleClickOutside);
   }, []);
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => toast.success("Logged out successfully!"))
+      .catch(() => toast.error("Failed to log out!"));
+  };
 
   const links = (
     <>
       <li>
-        <NavLink to="/" className="text-neutral-700 hover:text-neutral-900">
+        <NavLink to="/" className="hover:text-yellow-300">
           Home
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/allPackages"
-          className="text-neutral-700 hover:text-neutral-900"
-        >
+        <NavLink to="/allPackages" className="hover:text-yellow-300">
           All Packages
         </NavLink>
       </li>
-
       {user && (
         <li>
-          <NavLink
-            to="/myBookings"
-            className="text-neutral-700 hover:text-neutral-900"
-          >
+          <NavLink to="/myBookings" className="hover:text-yellow-300">
             My Bookings
           </NavLink>
         </li>
       )}
       <li>
-        <NavLink
-          to="/aboutUs"
-          className="text-neutral-700 hover:text-neutral-900"
-        >
+        <NavLink to="/blogs" className="hover:text-yellow-300">
+          Blogs
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/aboutUs" className="hover:text-yellow-300">
           About Us
         </NavLink>
       </li>
     </>
   );
 
-  const handleSignOut = () => {
-    signOutUser()
-      .then(() => {
-        toast.success("Logged out successfully!");
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Failed to log out!");
-      });
-  };
-
   return (
-    <div>
-      <div className="navbar bg-neutral-content shadow-sm fixed top-0 left-0 w-full z-50">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+    <div className="navbar bg-[#00809D] text-white border-b border-base-200 fixed top-0 w-full z-50 shadow-sm">
+      <div className="navbar-start">
+        {/* Mobile Menu */}
+        <div className="dropdown relative">
+          <label tabIndex={0} className="btn btn-ghost lg:hidden">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              {links}
-            </ul>
-          </div>
-          <div className="flex items-center">
-            <div>
-              <Link to="/">
-                <img
-                  className="w-14 ml-2  hidden sm:block"
-                  src="https://i.ibb.co/8D4d4yK6/gojoy-logo-transparent.png"
-                  alt="GoJoy Logo"
-                />
-              </Link>
-            </div>
-            <div>
-              <h1 className="font-bold text-xl  text-info-content  ">
-                Go<span className="text-warning text-2xl">Joy</span>
-              </h1>
-            </div>
-          </div>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{links}</ul>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </label>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-box w-52 z-[999]"
+          >
+            {links}
+          </ul>
         </div>
 
-        <div className="navbar-end">
-          {/*theme controller */}
-          <div className="mr-1 lg:mr-3">
-            <input
-              type="checkbox"
-              value="dark"
-              className="toggle theme-controller"
-            />
-          </div>
-          {user ? (
-            <div className="relative" ref={dropdownRef}>
-              <div
-                className="flex items-center btn cursor-pointer rounded-full  w-20"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <div className="avatar avatar-online avatar-placeholder">
-                  <div className="w-10 rounded-full">
-                    <img
-                      src={
-                        user.photoURL ||
-                        "https://i.ibb.co/YTjW3vF/default-profile.jpg"
-                      }
-                      alt="User Photo"
-                    />
-                  </div>
-                </div>
-                <div
-                  className={`transform transition-transform duration-300 ${
-                    dropdownOpen ? "rotate-180" : ""
-                  }`}
-                >
-                  <RiArrowDropDownLine size={35} />
+        {/* Logo */}
+        <Link to="/" className="ml-2">
+          <img src={logo} alt="GoJoy Logo" className="w-36 hidden sm:block" />
+        </Link>
+      </div>
+
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1 space-x-2">{links}</ul>
+      </div>
+
+      <div className="navbar-end flex items-center gap-2 pr-4">
+        {/* Theme Toggle */}
+        <label className="cursor-pointer flex items-center">
+          <input
+            type="checkbox"
+            value="dark"
+            className="toggle theme-controller"
+          />
+        </label>
+
+        {/* Auth Section */}
+        {loading ? (
+          <div className="skeleton w-24 h-10 rounded bg-[#00809D] dark:bg-[#00809D]"></div>
+        ) : user ? (
+          <div className="relative" ref={dropdownRef}>
+            <div
+              className="flex items-center cursor-pointer space-x-1"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img
+                    src={
+                      user.photoURL ||
+                      "https://i.ibb.co/YTjW3vF/default-profile.jpg"
+                    }
+                    alt="user"
+                  />
                 </div>
               </div>
-
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 p-5 w-60 lg:w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                  <div className="py-1 text-center">
-                    <img
-                      src={
-                        user.photoURL ||
-                        "https://i.ibb.co/YTjW3vF/default-profile.jpg"
-                      }
-                      alt="Profile"
-                      className="w-16 h-16 rounded-full mx-auto"
-                    />
-                    <p className="font-semibold text-info my-2">{user.email}</p>
-                    <hr className="my-2" />
-
-                    <ul className="space-y-2 text-left">
-                      <li>
-                        <NavLink
-                          to="/addPackage"
-                          className="block px-4 py-2 text-sm text-neutral hover:bg-gray-100 rounded"
-                        >
-                          Add Package
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          to="/manage-my-packages"
-                          className="block px-4 py-2 text-sm text-neutral hover:bg-gray-100 rounded"
-                        >
-                          Manage My Packages
-                        </NavLink>
-                      </li>
-                      <li>
-                        <button
-                          onClick={handleSignOut}
-                          className="w-full text-left px-4 py-2 text-sm text-neutral hover:bg-gray-100 rounded"
-                        >
-                          LogOut
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              )}
+              <RiArrowDropDownLine
+                size={30}
+                className={`transition ${dropdownOpen ? "rotate-180" : ""}`}
+              />
             </div>
-          ) : (
-            <Link to={"/auth/logIn"} className="btn btn-primary">
-              <MdLogin size={25} /> LogIn
+
+            {dropdownOpen && (
+              <div className="absolute right-0 top-14 w-72 sm:w-64 rounded-lg shadow-lg p-4 z-50 bg-white text-gray-800 dark:bg-[#00809D] dark:text-white transition-all">
+                <div className="text-center mb-3">
+                  <img
+                    src={
+                      user.photoURL ||
+                      "https://i.ibb.co/YTjW3vF/default-profile.jpg"
+                    }
+                    alt="Profile"
+                    className="w-16 h-16 rounded-full mx-auto"
+                  />
+                  <p className="text-sm font-medium mt-2">{user.email}</p>
+                </div>
+
+                <hr className="my-2 border-gray-300 dark:border-white/20" />
+
+                <ul className="space-y-2">
+                  <li>
+                    <NavLink
+                      to="/addPackage"
+                      className="block px-4 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-white dark:hover:text-[#00809D]"
+                    >
+                      Add Package
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/manage-my-packages"
+                      className="block px-4 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-white dark:hover:text-[#00809D]"
+                    >
+                      Manage My Packages
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-white dark:hover:text-[#00809D]"
+                    >
+                      Log Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Button className="border-yellow-600 shadow-none">
+            <Link to="/auth/logIn" className="flex gap-1 items-center">
+              <MdLogin size={22} /> Log In
             </Link>
-          )}
-        </div>
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import Button from "../Shared/Button";
 
 const AddPackage = () => {
   const { user } = useAuth();
@@ -68,9 +69,13 @@ const AddPackage = () => {
 
   return (
     <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg my-20">
-      <h2 className="text-3xl font-bold mb-6 text-center text-primary">
-        Add New Tour Package
+      <h2 className="text-3xl font-bold mb-2 text-center text-[#00809D]">
+        Create Your Dream Tour Package
       </h2>
+      <p className="text-center text-gray-600 mb-6">
+        Explore amazing destinations and customize your perfect trip
+      </p>
+
       <form
         onSubmit={handleAddPackage}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -183,8 +188,8 @@ const AddPackage = () => {
           ></textarea>
         </div>
 
-        <div className="md:col-span-2 flex justify-center mt-4">
-          <button type="submit" className="btn btn-primary w-1/2">
+        <div className="md:col-span-2 flex justify-center text-white mt-4">
+          <button type="submit" className="btn  bg-[#00809D] w-1/2">
             Add Package
           </button>
         </div>

@@ -1,37 +1,33 @@
 import React, { Suspense, useState } from "react";
-import { useNavigate } from "react-router";
 import { FiPhoneCall } from "react-icons/fi";
 import FeaturedPackage from "./FeaturedPackage";
 import Banner from "./Banner";
 import ExploreDestinations from "../Shared/ExploreDestinations ";
 import DiscountBanner from "../Shared/DiscountBanner";
+import Button from "../Shared/Button";
 
 const Home = () => {
-  const navigate = useNavigate();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const featuredPackagePromise = fetch("http://localhost:5000/packages").then(
-    (res) => res.json()
-  );
+  const featuredPackagePromise = fetch(
+    "https://gojoy-app-server.vercel.app/packages"
+  ).then((res) => res.json());
 
   return (
     <div>
       <Banner />
 
       <Suspense
-        fallback={<span className="loading loading-dots loading-xl"></span>}
+        fallback={
+          <div className="flex justify-center items-center h-[50vh]">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+          </div>
+        }
       >
         <FeaturedPackage featuredPackagePromise={featuredPackagePromise} />
       </Suspense>
 
-      <div className="text-center mt-8">
-        <button
-          onClick={() => navigate("/allPackages")}
-          className="btn btn-primary px-8 my-2"
-        >
-          Show All
-        </button>
-      </div>
       {/* Section 1 */}
       <DiscountBanner></DiscountBanner>
 
@@ -40,19 +36,14 @@ const Home = () => {
 
       {/* Section 3: Customer Support */}
       <section className="my-16 px-6 max-w-6xl mx-auto bg-indigo-50 rounded-lg p-5 text-center">
-        <h2 className="text-3xl font-bold mb-2 text-indigo-700">
+        <h2 className="text-3xl font-bold mb-2 text-[#00809D] ">
           Customer Support
         </h2>
         <p className="text-gray-700 max-w-3xl mx-auto mb-4">
           Our dedicated support team is available 24/7 to help you with your
           bookings, answer questions, and provide travel assistance.
         </p>
-        <button
-          className="btn btn-outline btn-primary"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Contact Us
-        </button>
+        <Button onClick={() => setIsModalOpen(true)}> Contact Us</Button>
       </section>
 
       {/* Modal */}

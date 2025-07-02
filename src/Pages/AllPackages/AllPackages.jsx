@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import { CiLocationOn } from "react-icons/ci";
+import { motion } from "framer-motion";
+import Container from "../Shared/Container";
+import Button from "../Shared/Button";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 const AllPackages = () => {
   const [packages, setPackages] = useState([]);
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -15,7 +21,6 @@ const AllPackages = () => {
       setLoading(true);
       try {
         let config = {};
-
         if (user) {
           const idToken = await user.getIdToken();
           config.headers = {
@@ -42,11 +47,6 @@ const AllPackages = () => {
     setSearch(e.target.value);
   };
 
-  const filteredPackages = packages.filter((pkg) => {
-    const tourName = pkg?.tour_name || "";
-    return tourName.toLowerCase().includes(search.toLowerCase());
-  });
-
   const handleViewDetails = (id) => {
     if (!user) {
       navigate("/auth/logIn", { state: { from: `/packages/${id}` } });
@@ -55,78 +55,115 @@ const AllPackages = () => {
     }
   };
 
+  const sortedPackages = [...packages]
+    .filter((pkg) => {
+      const tourName = pkg?.tour_name || "";
+      return tourName.toLowerCase().includes(search.toLowerCase());
+    })
+    .sort((a, b) => {
+      if (sortBy === "priceLow") return a.price - b.price;
+      if (sortBy === "priceHigh") return b.price - a.price;
+      if (sortBy === "latest")
+        return new Date(b.departure_date) - new Date(a.departure_date);
+      return 0;
+    });
+
   if (loading)
-    return <div className="text-center py-20 text-xl">Loading Packages...</div>;
+    return (
+      <div className="flex justify-center items-center h-[60vh] text-lg">
+        Loading Tour Packages...
+      </div>
+    );
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">All Tour Packages</h1>
-
-      <div className="mb-6 flex justify-center">
-        <input
-          type="text"
-          placeholder="Search by tour name..."
-          value={search}
-          onChange={handleSearchChange}
-          className="input input-bordered w-full max-w-md"
-        />
-      </div>
-
-      {filteredPackages.length === 0 ? (
-        <p className="text-red-500 text-center">No packages found!</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {filteredPackages.map((pkg) => (
-            <div
-              key={pkg._id}
-              className="card bg-base-100 shadow-lg p-4 rounded-lg"
-            >
-              <img
-                src={pkg.image}
-                alt={pkg.tour_name}
-                className="rounded-lg h-48 w-full object-cover mb-4"
-              />
-              <h3 className="text-xl font-semibold">{pkg.tour_name}</h3>
-
-              <p className="mt-2">
-                <strong>Duration:</strong> {pkg.duration}
-              </p>
-              <p>
-                <strong>Departure:</strong> {pkg.departure_date}
-              </p>
-              <p>
-                <strong>Price:</strong> {pkg.price} BDT
-              </p>
-              
-              {/* Guide Info */}
-              <div className="flex items-center gap-3 mb-4 bg-gray-100 p-3 rounded-lg shadow-sm">
-                <div className="relative">
-                  <img
-                    src={pkg.guidePhoto}
-                    alt={pkg.guideName}
-                    className="w-12 h-12 rounded-full border-4 border-primary object-cover"
-                  />
-                  <span className="absolute bottom-0 right-0 w-3 h-3  rounded-full   border-white"></span>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800">
-                    {pkg.guideName}
-                  </h4>
-                  <p className="text-sm text-gray-500">Tour Guide</p>
-                </div>
-              </div>
-
-              <button
-                className="btn btn-primary mt-4 w-full"
-                onClick={() => handleViewDetails(pkg._id)}
-              >
-                View Details
-              </button>
-            </div>
-          ))}
+    <Container>
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-[#00809D] mb-2">
+            Explore Our Tour Collections
+          </h1>
+          <p className="text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+            Discover handpicked tour packages for every traveler – from relaxing
+            getaways to thrilling adventures, across breathtaking global
+            destinations.
+          </p>
         </div>
-      )}
-    </div>
+
+        {/* Search and Sort */}
+        <div className="mb-8 flex flex-col md:flex-row justify-between gap-4 items-center">
+          <input
+            type="text"
+            placeholder="Search by tour name..."
+            value={search}
+            onChange={handleSearchChange}
+            className="input input-bordered w-full max-w-md"
+          />
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="select select-bordered w-full md:w-64"
+          >
+            <option value="">Sort By</option>
+            <option value="priceLow">Price: Low to High</option>
+            <option value="priceHigh">Price: High to Low</option>
+            <option value="latest">Departure Date: Newest</option>
+          </select>
+        </div>
+
+        {/* Packages */}
+        {sortedPackages.length === 0 ? (
+          <p className="text-center text-red-500">No packages found!</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {sortedPackages.map((pkg, index) => (
+              <motion.div
+                key={pkg._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-xl transition p-3 flex flex-col"
+              >
+                <figure className="relative mb-3">
+                  <img
+                    src={pkg.image}
+                    alt={pkg.tour_name}
+                    className="w-full h-52 object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#00809D] text-white px-2 py-1 rounded-full text-xs shadow-md">
+                    {pkg.duration}
+                  </div>
+                </figure>
+
+                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-1 mb-1">
+                  <FaMapMarkerAlt className="text-[#00809D]" />
+                  {pkg.tour_name}
+                </h3>
+
+                <p className="text-sm text-gray-600 mb-1">
+                  <strong>Departure:</strong> {pkg.departure_date}
+                </p>
+                <p className="text-sm text-gray-600 mb-1">
+                  <strong>Price:</strong> {pkg.price} BDT
+                </p>
+                <p className="text-sm text-gray-600 mb-4">
+                  <strong>Overview:</strong>{" "}
+                  {pkg.package_details?.split(" ").slice(0, 12).join(" ")}...
+                </p>
+
+                <Button
+                  onClick={() => handleViewDetails(pkg._id)}
+                  className=" btn-sm mt-auto w-full"
+                >
+                  View Details
+                </Button>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </Container>
   );
 };
 

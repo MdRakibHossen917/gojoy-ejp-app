@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../Shared/Button";
 
 const ContactUs = () => {
   return (
@@ -10,9 +11,9 @@ const ContactUs = () => {
         <div className="space-y-4">
           <div>
             <h2 className="text-xl font-bold mb-2">Head Office</h2>
-            <p>123 GoJoy Street, Dhaka, Bangladesh</p>
-            <p>Email: support@gojoy.com</p>
-            <p>Phone: +880 1234-567890</p>
+            <p>8/1A Shomaj Kallan Road,Tongi-Gazipur, Dhaka</p>
+            <p>Email: rakibhossen.dev@gmail.com</p>
+            <p>Phone: +8801300981501</p>
           </div>
           <div></div>
         </div>
@@ -45,7 +46,7 @@ const ContactUs = () => {
               required
             ></textarea>
           </div>
-          <button className="btn btn-primary w-full">Send Message</button>
+          <Button className="w-full">Send Message</Button>
         </form>
       </div>
     </div>

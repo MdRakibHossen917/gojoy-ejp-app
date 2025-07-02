@@ -2,30 +2,33 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooksAxious/useAxiousSecure";
+import Button from "../Shared/Button";
+
 
 const MyBookings = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
-  const [packagesMap, setPackagesMap] = useState({});  
+  const [packagesMap, setPackagesMap] = useState({});
+  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
 
-  // Fetch bookings and packages data
+  // Fetch bookings and corresponding packages
   const fetchBookings = async () => {
     if (!user?.email) return;
 
+    setLoading(true);
     try {
-      // 1. Get bookings of logged in user
       const res = await axiosSecure.get(`/bookings?buyerEmail=${user.email}`);
       const bookingsData = res.data;
       setBookings(bookingsData);
 
-      // 2. Get unique package IDs from bookings
+      // Get unique package IDs
       const uniquePackageIds = [
         ...new Set(bookingsData.map((b) => b.packageId)),
       ];
       const newPackagesMap = { ...packagesMap };
 
-      // 3. Fetch package details for each unique packageId if not fetched yet
+      // Fetch packages only if not already fetched
       await Promise.all(
         uniquePackageIds.map(async (id) => {
           if (!newPackagesMap[id]) {
@@ -43,6 +46,8 @@ const MyBookings = () => {
     } catch (err) {
       console.error("Failed to load bookings", err);
       Swal.fire("Error", "Failed to load bookings", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,10 +55,20 @@ const MyBookings = () => {
     fetchBookings();
   }, [user?.email]);
 
-  if (!user) return <p>Please login to see your bookings</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
 
-  // Confirm booking: status update to "completed"
-  async function handleConfirm(bookingId) {
+  if (!user)
+    return (
+      <p className="text-center mt-10">Please login to see your bookings.</p>
+    );
+
+  // Confirm booking status update
+  const handleConfirm = async (bookingId) => {
     try {
       const res = await axiosSecure.patch(`/bookings/${bookingId}`, {
         status: "completed",
@@ -68,10 +83,10 @@ const MyBookings = () => {
       console.error(error);
       Swal.fire("Error", "Failed to confirm booking", "error");
     }
-  }
+  };
 
   // Delete booking
-  async function handleDelete(bookingId) {
+  const handleDelete = async (bookingId) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You want to delete this booking?",
@@ -94,14 +109,19 @@ const MyBookings = () => {
         Swal.fire("Error", "Failed to delete booking", "error");
       }
     }
-  }
+  };
 
   return (
     <div className="max-w-6xl mx-auto my-10 p-5">
-      <h2 className="text-3xl font-bold mb-6">My Bookings</h2>
+      <h2 className="text-3xl font-bold mb-2 text-[#00809D] text-center">
+        My Bookings
+      </h2>
+      <p className="text-center text-gray-600 mb-6 max-w-md mx-auto">
+        Review and manage all your tour bookings in one place.
+      </p>
 
       {bookings.length === 0 ? (
-        <p>No bookings found.</p>
+        <p className="text-center text-gray-600">No bookings found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">
@@ -138,7 +158,6 @@ const MyBookings = () => {
                         ? new Date(booking.bookingDate).toLocaleDateString()
                         : "-"}
                     </td>
-
                     <td>
                       {pkg
                         ? pkg.departureLocation || pkg.departure_location
@@ -163,16 +182,16 @@ const MyBookings = () => {
                     <td>
                       {booking.status !== "completed" && (
                         <button
-                          className="btn btn-sm btn-success"
+                          className=" btn-sm  "
                           onClick={() => handleConfirm(booking._id)}
                         >
-                          Confirm
+                          <Button>Confirm</Button>
                         </button>
                       )}
                     </td>
                     <td>
                       <button
-                        className="btn btn-sm btn-error"
+                        className="btn text-white btn-error"
                         onClick={() => handleDelete(booking._id)}
                       >
                         Delete

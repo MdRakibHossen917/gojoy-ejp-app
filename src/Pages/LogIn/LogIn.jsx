@@ -5,6 +5,7 @@ import logInLottie from "../../assets/LoginLottie.json";
 import SocialLogIn from "../Shared/SocialLogIn";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import Button from "../Shared/Button";
 
 const LogIn = () => {
   const { signInUser } = useContext(AuthContext);
@@ -71,16 +72,18 @@ const LogIn = () => {
               <div className="mt-2 mb-4">
                 <a className="link link-hover text-sm">Forgot password?</a>
               </div>
-
-              <button type="submit" className="btn btn-neutral w-full">
+              <Button type="submit" className="w-full">
+               
                 Log In
-              </button>
+              </Button>
+
+             
 
               <p className="text-center text-gray-800 mt-4">
                 Don&apos;t have an account?{" "}
                 <Link
                   to="/auth/register"
-                  className="ml-1 text-blue-600 underline font-bold"
+                  className="ml-1 text-[#00697F] underline font-bold"
                 >
                   Register
                 </Link>

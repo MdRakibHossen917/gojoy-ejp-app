@@ -7,6 +7,7 @@ import Lottie from "lottie-react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Button from "../Shared/Button";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ const Register = () => {
                 Already have an account?
                 <Link
                   to="/auth/login"
-                  className="ml-1 text-blue-600 underline font-bold"
+                  className="ml-1 text-[#00697F] underline font-bold"
                 >
                   Log In
                 </Link>{" "}
@@ -167,13 +168,9 @@ const Register = () => {
                   placeholder="Confirm Password"
                 />
               </div>
-
-              <button
-                type="submit"
-                className="w-full btn px-8 py-3 btn-primary font-semibold"
-              >
+              <Button type="submit" className="w-full font-semibold">
                 Sign Up
-              </button>
+              </Button>
             </form>
           </div>
         </div>

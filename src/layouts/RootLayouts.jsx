@@ -5,11 +5,11 @@ import Footer from "../Pages/Shared/Footer";
 
 const RootLayouts = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="mt-18">
+    <div className="bg-white">
+      <div className="mt-23">
         <Navbar />
       </div>
-      <div className="flex-grow">
+      <div className="min-h-[calc(100vh-72px)]">
         <Outlet />
       </div>
       <Footer />
