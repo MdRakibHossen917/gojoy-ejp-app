@@ -180,7 +180,7 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          <Button className=" shadow px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 lg:px-6 lg:py-3 text-sm sm:text-base md:text-lg">
+          <Button className=" border-none shadow-4xl px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 lg:px-6 lg:py-3 text-sm sm:text-base md:text-lg">
             <Link
               to="/auth/logIn"
               className="flex items-center gap-1 sm:gap-2 md:gap-2.5"

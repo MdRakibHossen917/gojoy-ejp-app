@@ -86,7 +86,7 @@ const LogIn = () => {
               </div>
 
               <div className="text-right">
-                <a href="#" className="text-sm text-blue-600 hover:underline">
+                <a href="#" className="text-sm text-[#00809D] hover:underline">
                   Forgot password?
                 </a>
               </div>
