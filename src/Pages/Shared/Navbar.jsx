@@ -90,7 +90,11 @@ const Navbar = () => {
 
         {/* Logo */}
         <Link to="/" className="ml-2">
-          <img src={logo} alt="GoJoy Logo" className="w-36 hidden sm:block" />
+          <img
+            src={logo}
+            alt="GoJoy Logo"
+            className="w-24 sm:w-20 md:w-32 lg:w-36"
+          />
         </Link>
       </div>
 
@@ -147,8 +151,6 @@ const Navbar = () => {
                   />
                   <p className="text-sm font-medium mt-2">{user.email}</p>
                 </div>
-
-                
 
                 <ul className="space-y-2">
                   <li>
